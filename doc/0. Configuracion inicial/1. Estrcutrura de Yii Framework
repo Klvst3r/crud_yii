@@ -1,0 +1,38 @@
+Estructura de Yii Framework
+
+La estructura de los proyectos en Yii tenemos un grupo de carpetas
+
+/
+assets/
+commands/
+config/             Configuraciones a la Bd, accesos, caracteristicas de Yii Framework
+controllers/        Controladores que gestiona todo lo que entra a partir de la solicitud delusuario o cliente.
+mail/
+models/             Acceso a diferentes elementos de la BD, o interacción de la BD.
+runtime/
+test/
+vagrant/
+vendor/
+views/              Las vistas, presentar la información del usuario.
+    layouts/
+    site/           Hace referencia al contenido de nuestro sitio o aplicación
+        about
+        contact
+        error
+        index       Pagina inicial del proyecto, disparador inicial
+        login
+
+web/                Elementos que se van a presentar al usuario final
+    assets/
+    css/                    Caracteristics de la interfaz con la hoja de estilos
+        .htaccess
+        favicon.ico
+        index.test.php
+        robots.txt
+
+widgets/
+.bowerrc
+.gitignore
+codeception.yml
+
+

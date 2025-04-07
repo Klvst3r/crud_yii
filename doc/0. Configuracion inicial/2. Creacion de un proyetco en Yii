@@ -1,0 +1,245 @@
+Introducción.
+
+
+Integrar las vistas con la construccion de la solución
+
+Creación de una vistas
+    como Funcionan las vistas
+
+
+Vistas
+-------
+
+Despues de Instalar el Framework, vamos a arrancar.
+
+si hacemos click en
+    My Application
+
+        Veremos ver las opciones que dara exclicacionees
+            P.e
+                Creamos nuestro sitio
+
+
+Crear nuestro proyecto
+----------------------
+Para crear nuestro proyecto en Yii debemos utilizar una versión de php especifica, para nuestro caso utilizaremos la verison con php 8.1
+
+Para crear nuestro proyecto inicial haremos el siuginetye procedimiento.
+
+
+Para crear nuestro proyecto en Linux tenemos las siguientes formas para artrancar nuestro proyecto
+
+1. Usando Composer directamente (instalación recomendada)
+---
+
+    $ composer create-project --prefer-dist yiisoft/yii2-app-basic crud_yii
+
+Esto descarga la plantilla "basic" de Yii2.
+
+
+    Ej.
+    $ composer create-project --prefer-dist yiisoft/yii2-app-basic crud_yii
+
+
+
+ 2. Crear proyecto desde una plantilla clonando el repositorio (más control)
+---
+Si quieremos clonar el repositorio para tener más control sobre versiones o modificar la plantilla:
+
+    $ git clone https://github.com/yiisoft/yii2-app-basic.git crud_yii
+    $ cd crud_yii
+    $ composer install
+
+
+
+3. Crear con plantilla "advanced" en lugar de "basic"
+---
+Yii2 también ofrece una plantilla avanzada:
+
+    $ composer create-project --prefer-dist yiisoft/yii2-app-advanced crud_yii_advanced
+
+Después de crear el proyecto, ejecutamos:
+
+    $ cd crud_yii_advanced
+    $ php init
+
+Este comando nos preguntara si deseamos configurar para entorno de desarrollo o producción.
+
+
+
+4. Usar Docker (opcional)
+
+Si queremos montar un entorno rápido y portable con Yii2 usando Docker, puedemos usar una plantilla como esta:
+
+    Yii2 Docker Template
+        https://github.com/yiisoft/yii2-docker
+
+
+O crear tu propio Dockerfile con PHP, Nginx y Composer.
+
+
+Con esto Composer ya instaló todas las dependencias automáticamente, así que NO es necesario ejecutar composer install de nuevo, a menos que:
+
+    Borras el directorio vendor/
+
+    Descargas el proyecto desde un repositorio sin el directorio vendor/
+
+
+
+
+
+Despues de crear nuestro proyecto
+---------------------------------
+
+Los siguientes pasos recomendados tras crear el proyecto Yii2 son los siguientes:
+
+1. Ingresar al proyecto:
+
+    $ cd crud_yii
+
+2. Configurar conexión a base de datos
+
+Abre el archivo de configuración de la base de datos:
+
+    $ config/db.php
+
+Y edita las credenciales:
+
+    return [
+        'class' => 'yii\db\Connection',
+        'dsn' => 'mysql:host=localhost;dbname=mi_base_de_datos',
+        'username' => 'usuario',
+        'password' => 'contraseña',
+        'charset' => 'utf8',
+    ];
+
+3. Verificar permisos de carpetas
+
+Yii necesita que las siguientes carpetas tengan permisos de escritura:
+
+    runtime/
+    web/assets/
+
+En Linux/Mac puedes hacer:
+
+    $ chmod -R 775 runtime web/assets
+
+O con www-data si usas Apache/Nginx:
+
+    $ chown -R www-data:www-data runtime web/assets
+
+4. Probar que funciona
+
+Levanta un servidor de desarrollo para probarlo:
+
+    $ php yii serve
+
+
+Aca nosotros regularmente le indicamos a yii que puerto va a utilizar por ejemplo
+
+    $ php yii serve --port=7000
+
+O, si prefieres usar el clásico php -S:
+
+    $ php -S localhost:8080 -t web
+
+Después entra a:
+
+    $ http://localhost:8080
+
+Y deberías ver la página de bienvenida de Yii2.
+
+
+
+Configurar la llave "Secret key"
+---------------------------
+
+Yii2 no requiere una "secret key" obligatoria como Laravel (por ejemplo APP_KEY). Sin embargo:
+
+    Yii2 usa una clave de validación de cookies para proteger la sesión y los datos del usuario.
+
+    Esta clave se define en el archivo config/web.php.
+
+Revisamos esta parte en config/web.php:
+
+    'components' => [
+        'request' => [
+            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
+            'cookieValidationKey' => 'pon-aqui-tu-clave-secreta',
+        ],
+    ],
+
+➡️ Si está vacío o dice algo genérico, los cámbiamos por una clave aleatoria como por ejemplo:
+
+    'cookieValidationKey' => 'a93nd92md921ne81234smg1827bsj1sn',
+
+Puedemos generarla con cualquier generador de claves o incluso con este comando:
+
+
+    $ php -r "echo bin2hex(random_bytes(32));"
+
+
+
+
+2. Configurar conexión a la base de datos
+
+Editamos config/db.php como ya que como se menciono antes, para enlazar con ls base de datos MySQL o la que usemos.
+
+
+
+3. Probar Gii (Generador de Código)
+
+Yii2 incluye una herramienta poderosa llamada Gii para generar CRUDs automáticamente.
+
+Para actívarla en config/web.php (si aún no está activa):
+
+    if (YII_ENV_DEV) {
+        $config['bootstrap'][] = 'gii';
+        $config['modules']['gii'] = [
+            'class' => 'yii\gii\Module',
+        ];
+    }
+
+Después accedemos a Gii desde:
+
+    http://localhost:8080/index.php?r=gii
+
+Como nuestro servidor eta configurado utilizando el puerto 7000 tendremos:
+
+    http://localhost:7000/index.php?r=gii
+
+Ahí podemos generar:
+
+    - Modelos
+    - Controladores
+    - CRUDs completos
+    - Formularios
+
+4. Organizar nuestra aplicación: crear tus propios controladores y vistas
+
+Ejemplo: Si deseamos crear un nuevo controlador SiteController personalizado:
+
+    $ php yii gii/controller --controllerClass=app\controllers\HolaController --actions=index,saludo
+
+Esto crea el controlador y sus acciones, y puedemos luego crear las vistas en:
+
+    views/hola/index.php
+    views/hola/saludo.php
+
+
+5. Leer la guía oficial paso a paso
+
+Ya que estamos empezando, este enlace es oro puro:
+
+Guía oficial de Yii2
+
+Te guía por:
+
+    - Estructura de carpetas
+    - MVC en Yii2
+    - Uso de Gii
+    - Conexiones a BD
+    - Formularios
+    - Validación
+    - Seguridad
+

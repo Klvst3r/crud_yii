@@ -1,0 +1,90 @@
+Para tener un proyecto tenemos los siguientes requerimientos.
+
+Para el caso de Windows
+
+Debemos tener XAMPP 3.2.4 para nuestro entorno
+
+
+Para las demas plataformas como Mac OS o Linux ya tendremos nuestro Stack
+
+- Composer
+
+	Dentro de los elementos indispensables para administrar nuestros paquetes debemos hacer uso de composer
+
+
+Verifica que tienes Composer instalado correctamente:
+
+	$ composer --version
+
+
+		Composer version 2.7.9 2024-09-04 14:43:28
+		PHP version 8.1.32 (/usr/bin/php8.1)
+
+
+Con esto debe bastar para poder iniciar nuestro proyecto con Yii Framework 2, y aunque estos son los requisitos principales es decir PHP y Composer, o necesitas npm ni node.js a menos que uses funcionalidades específicas del frontend. Aquí te detallo los requisitos esenciales y opcionales:
+
+Requisitos mínimos (obligatorios):
+
+    - PHP ≥ 5.4 (tú tienes 8.1.32, va perfecto)
+	- Composer instalado y funcional
+
+ 
+ Extensiones de PHP habilitadas: Yii2 necesita algunas extensiones comunes. Puedes verificar que estén habilitadas con:
+
+    	$ php -m
+
+ Las extensiones mínimas requeridas son:
+        - pdo
+        - pdo_mysql (si vas a usar MySQL)
+        - mbstring
+        - intl
+        - openssl
+        - fileinfo
+
+Requisitos recomendados (para características adicionales):
+    - curl
+    - gd (para procesamiento de imágenes)
+    - imagick (opcional, alternativa a gd)
+    - zip
+    - dom
+    - json
+
+¿Y Node/NPM?
+-------
+No son necesarios a menos que uses:
+    - Integración con herramientas de frontend (como Webpack, Sass, etc.)
+    - Paquetes npm en plantillas avanzadas o personalizadas
+
+En proyectos básicos de Yii2 (yii2-app-basic), no necesitamos NPM ni Node.
+
+
+Verificación de los requisitos con Yii Requirements Checker
+-------------------------------------------------------------
+
+Yii2 incluye un verificador de requisitos. Después de instalar el proyecto, puedes correrlo desde tu navegador:
+
+Descargamos este script (opcional, pero útil):
+
+       https://github.com/yiisoft/yii2/blob/master/requirements.php
+
+Lo colócamos en la raíz del proyecto y accede a él en tu navegador, ejemplo:
+
+	http://localhost/crud_yii/requirements.php
+
+
+Plugins para nuestro editor.
+
+Considerando que tenemos como editor de trabajo a VSC vamos a considerar los siguientes pligins para trabajar con Yii Framework
+
+Extensiones
+
+- Bootstrap 3 Snippets (Bootstrap)
+- Bootstrap 3 Snippets fro VSC
+- Yii Snippets (Autocompletado)
+- Yii snippets for VS Code
+- Atom keybindings for VSC
+
+Temas
+- Andromeda
+- Dark theme with taste (Eliver Lara)
+- Palenight
