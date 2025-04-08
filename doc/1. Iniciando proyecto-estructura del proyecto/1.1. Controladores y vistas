@@ -1,0 +1,106 @@
+3. Controladores
+
+Si recpcionamos información vamos a utilizar por ejemplo
+
+	SiteController.php
+
+Crear un controlador, utilizando el sisyema Camel Case. Se crea el controlador
+
+Como segundo punto debemos crar una vista que muestre
+
+	views/site
+
+como nuestro controlador se inicia con Site la carpeta tambien iniciara con la estructura anterio
+
+Creamos ahora una vista
+
+	views/site/index.php
+
+
+que tendra nuestro saludo con el template integrado que tienen la el header y el footerc 
+
+Ahora en el archivo
+
+index.php
+
+<?php
+use yii\helpers\Html;
+
+?>
+Hola mundo desde Yii Framework
+
+
+
+cuando creamos un crontrolador definimos el espacio de trabajo para ello se crea con la convencion
+
+namespace 
+	app haciendo 	==> 	Referencia a la aplicación
+		controllers	==>		Referencia a los controladores
+
+Despues de ello se hace referencia a los elementos del framework que se van a utilizar como son:
+
+use yii;		EL framework en si
+
+use yii\filters\AccessController:  El control de acceso a los controladores como filtro
+
+use yii\web\controller 		Para poder manipular la vista
+
+
+Ahora creaos nuestra clase que le vamos a poner simplemente el nombre de nuestro controlador
+
+	class SitioController extends controller
+
+Donde ponemoa el nombre de nuestro controlador que extiende información directamente de lo que es la clase base de controller 	
+
+Este provee información del controlador para poder manipular la información del mismo, si no seria imposible trabajar con los controladores
+
+Dentro se crea un metodo, nos sirve para poder acceder
+
+	con 
+		public function action
+
+Yii siempre utiliza action seguido del nombr del metodo, quedando del controlador de la situirnte manera
+
+<?php
+
+namespace app\controllers;
+
+use Yii;
+
+use yii\filters\AccessControl;
+use yii\web\Controller;
+
+
+class SitioController extends Controller{
+
+    public function actionInicio
+}
+
+ ?>
+
+
+
+ Es decir que todo metodo que esta creado, dentro vamos a colocar lo que queremos que haga, para nuestro caso es rendeirzar una vista
+
+ Lo hacemos a traves de un metodo directamente llamado render todo lo que pone como parametros, 
+
+   public function actionInicio(){
+        return $this->render('inicio');
+    }
+
+
+Para ver el resultado y en el navegador podremos escribir.
+
+
+http://localhost:7000/index.php?r=sitio%2Finicio
+
+
+El primer inicio es el acceso que se va a genberar es decir el controlador que se llama inicio y seguido de una diagonal de inicio
+
+La url anterior se puede colocar preferentemente asi
+
+	http://localhost:7000/index.php?r=sitio/inicio
+
+Ahora accedemos directamente a la vista directamente de la solicitud por el controlador.
+
+

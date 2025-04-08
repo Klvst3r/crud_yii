@@ -1,0 +1,44 @@
+Ya tenemos el formulario, ahora la pregunta es como se integra esta vista
+
+	http://localhost:7000/index.php?r=sitio/inicio
+
+Directamente a lo que es el menu.
+
+Para resonder esto vamos a ir a la vista en la carpeta views, y podemos encontrar una carpeta llamada layout y ver el archivo main.php
+
+views/layout/main.php
+---
+
+donde podremos encontrar un alista que tiene propiemente el widget.
+
+      echo Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            Yii::$app->user->isGuest
+                ? ['label' => 'Login', 'url' => ['/site/login']]
+                : '<li class="nav-item">'
+                    . Html::beginForm(['/site/logout'])
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'nav-link btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>'
+        ]
+    ]);
+
+
+Este widget es una navegación que se hace por todo el sitio, donde si nos percatamos se tienen varias opciones y podmeos reemplazarlas o haciendo una copia, 
+
+duplicamos home y sustituimos
+
+
+    ['label' => 'Home', 'url' => ['/site/index']],
+    ['label' => 'Aplication', 'url' => ['/sitio/inicio']],
+
+
+con esto ya podemos ir estando en home hacia la aplciación.
+

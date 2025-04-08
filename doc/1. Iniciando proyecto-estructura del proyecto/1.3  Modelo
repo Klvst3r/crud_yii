@@ -1,0 +1,46 @@
+Teneiendo ya creado el contrador, 
+
+Yii 
+
+Creamos un archivo dentro de la carpeta models
+
+    FormularioForm.php 
+
+La nomenclatura una palabra la primera letra es mayuscula, y despues form, que no es necesario pero como se va a generar un formaulario para un registro, se utiliza para distinguirlo.
+
+
+Se incluye el codigo para clase modelo dentro del namespace
+
+
+
+ahora vamos a integrar una clase models que permite crear el modelo  a partir de una clase ya existente
+
+
+class formularioForm extends Model{
+    
+}
+
+
+Se pone class el nombre de la clase que el nombre debe concidir el nombre del archivo y por ende debe concidir el nombre de la clase, extendiendo de la clse Model, 
+
+Se hara una suma
+
+    public $valora;
+    public $valorb;
+
+
+
+Los roles son mecanismos que ayudan a validar la información en este caso a y b que esten requsitiados corectamente
+
+Indicamos que los valores sean reuqeridos, ya vamos a hacer unformualrio que solicite dos valores, para sumarlos hay que validarlos
+
+Indicamos tambien que sean numericos
+
+
+entonces en el modelo estamos definiendo la forma ne que la informacón va a ser procesada
+
+
+
+modelo completo
+
+

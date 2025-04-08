@@ -1,0 +1,89 @@
+Ahora que ya tenemos el formulario, vamo a recepcionar la informacipon,
+
+Para ello, cuando se crea el formualrio, el formulario esta listo para enviarse, entonces tecnicamente para enviarse es el metodo en donde se estra mostrando en este caso el controlador a traves de los iguiente:
+
+    public function actionInicio(){
+            $model = new FormularioForm;
+            return $this->render('inicio', ['model' => $model]);
+        }
+
+Com ya tenemos la funcionalidad, la información se envia pero no se mostrara nada, es decir en algun lado se recibe esa informacion.
+
+Entonces para hacer uso de este envio y repcecion de información, en el contrador, ya tenemos un modelo que nos va a dar la pauta, de que esa inforamción ha sido recepcionada
+
+
+Para elo preguntamos si esa ifnormaicón se ha enviado, o ha habido algun envio en algun metodo 
+
+identificadno la información que se esta enviadno, , mediante el envio o solicitud del envio
+
+    if($model->load(Yii:$app->request->post() ) && $model->validate() ){}
+
+Habla que la aplicacion no sesta haciendo un request, que envia datos a traves del metodo post, y ahora se tiene que validar a trves de ese metodo.
+
+ahora lo que se va a preguntar si el modelo ha validado la información. Es decir que todolo que nosotros hemos escrito coincide con lo requerido, o que sean numeros.
+
+
+Eto significa que se esta recpeiocnando la ifnoramcipon si hay un post y si ha habido una valildación, se podra procesar la ifnoramción de la siguiente manera.
+
+    $valorRespuesta = ("El resultado es:" . $model->valora + $model->valorb);
+
+La respuesta va a neter una suma de los valores concatenando el texto con la operación
+
+Ahora se va a mostrar el modelo, no solo se enviara la variable model sino tambien la variables, igualandose y teniendo el valor devalor respuesta, ahora le esoty enviando el modelo sino se envia el mensaje de la sumatoria con los dos parametros.
+
+    return $this->render('inicio', ['mensaje'=>$valorRespuesta, 'model'=>$model]);
+
+en el if se recepcionan los datos y se validan el valor a y b, se genera la opearcion y se genera la vista, con el valor de la operación
+
+El valor esta disponible en la parte de impresion en la vista, para elo en la vista 
+
+hacemos que si hay una varable de mensaje que es el que se esta enviadno desde el metodo del controlador.
+
+
+
+<?php
+if($mensaje){
+    echo Html::tag('div', Html::encode($mensaje), ['class'=>'alert-danger']);
+}
+
+?>
+
+Con esto primero validamos si hay un mensaje, si existe se mostrara el mensaje con un tag que permite la impresión de etiquetas html e incluso clases de bootsrap, a yraves de la codificación del mensaje.
+
+Es atraves de una clase de alerta, 
+
+Pero con esto estamos indicando que si no hay un envio, es deir no se cumple el if, de todas forma se esta enviando un modelo con:
+
+    return $this->render('inicio', ['model' => $model]);
+
+Lo que es el mensaje, no hay mensaje posiblemente marque error, para ello, modificamos.
+
+con este envio,
+
+        return $this->render('inicio', ['mensaje'=>"", 'model' => $model]);
+    }
+
+La validación de la vista no genera error
+
+<?php
+if($mensaje){
+    echo Html::tag('div', Html::encode($mensaje), ['class'=>'alert alert-danger']);
+}
+
+
+
+Para que pinte el resultado en un alert con los valores recibidos.
+
+
+Esta validación no si esta vacia no proboca error, si valida que tiene información que esta dentro de mensaje, lo renderiza.
+
+Entonces la información se esta procesando, podemos trabajar con las entregas.
+
+
+
+
+
+
+
+
+ 

@@ -1,0 +1,91 @@
+Ya tenemos definidos el modelos, vamos a utilizarlos,
+
+Podemos hacerlo con varios modelos definidos, ahora vamos a utilizarlo con nuetro controlador Sitiocontroller
+
+En el controlador vamos a utilizar el formulario para ello
+
+empleamos
+
+    use app\models\FormularioForm;
+
+
+Para que puedamos utilizarlo dentro de nuestro controlador
+
+
+$model = new FormularioForm;
+
+Con esto ya se instancio todo lo que hay en la clase form, que es formualrio form, ahora vamos a pasarlo a la vista para que lo pueda renderizar.
+
+return $this->render('inicio', ['model' => $model]);
+
+Vamos a pasarlo a la vista 
+
+se coloca el valor model o vairbale model que es la variable que se va a interpretar diractemente en la vista. pero con el dato model le vamos a pasar el valor de lo que es el valor del formualrio form
+
+se coloca entre corchetes por que se indica que son valores que se van a utilizar, dentro de la vista
+
+
+ahora hay que mostrarlo en la vista, no tiene mas infomación.
+
+
+Dentro de la vista necesitamos indicar que se va a uitlizar un formulario y que Yii lo conoce como wedget y el active form qu es para mostrar formualrios para genetrar las instrucciones html, para hacer uso de esto, pondemos lo siguente
+
+
+    $formulario = ActiveForm::begin();
+
+Copn esto indicamos que estamos iniciando el formaulrio   
+
+
+Entonces despues de ello hay que imprimir los campos
+
+
+<?php
+$formulario->field($model, 'valora')
+?>
+
+Ests campos provienen del modelo, en este caso lo que se esta haciendo es imprimiendo Model que viene se SiteController, y el valor es Model que tiene la igualación o asignacion de FormularioForm, y se pasa a traves del controlador la variable y ahora se puede acceder a la vista y tomar el valor a 
+
+Haciendo uso de Boostrap que ya lo incluye el framework
+
+
+<div class="form-group">
+    
+</div>
+
+
+Dentro utilizamos una clase que nos dara una pauta grafica incluida con yii, mediante la instrucción accede al html :: colocando una instancia que hace alusión a un metodo que submitbutton que en especifico tiene el valor enviar
+
+<?= Html::submitButton('Enviar', ['class'=>'btn btn-primary']) ?>
+
+Donde primera se crea una etieuqte html a partir de un boton, el valor que tiene el boton es Enviar, tiene ademas asignada una clase entre corchetes, por que osn propiedades que esty poneiendo que provienen directamente de boostrap, que son los estilos.
+
+ahora para ver el resultado hay que cerrar el formaulario 
+
+<?php ActiveForm::end(); ?>
+
+Asi indicamos el inidio los valores y despues el boton y cierra el formulario.
+
+
+Aca el formulario completo
+
+<?php $formulario=ActiveForm::begin(); ?>
+
+<?= $formulario->field($model, 'valora') ?>
+
+<?= $formulario->field($model, 'valorb') ?>
+
+<div class="form-group">
+    <?= Html::submitButton('Enviar', ['class'=>'btn btn-primary']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>
+
+
+cuando nosotro hacemos uso de 
+
+<?= esto inidica que estamos enviando un echo a la pantalla para que enderice en la vista, si no lo hacemos asi no se visualizara.el campo
+
+
+ahora tenemos los dos campos de acuerdo al modelo, incluso hace la validación establecida en el modelo
+
+
