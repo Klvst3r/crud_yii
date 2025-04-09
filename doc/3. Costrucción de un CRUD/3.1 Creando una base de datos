@@ -1,0 +1,45 @@
+Para crear nuestra base de datos, podemos tener nuestra base de datos
+
+Nuestra base de datos de ejemplo se llama biblioteca,
+
+Vamos a tener una tabla llamada libro, a partir de la base de datos vamos a generar el CRUD casi de forma automatica.
+
+
+Vamos a tener 3 campos
+
+    id int auto_integer
+    titulo varchar(255)
+    imagen varchar 2500
+
+Ya teniendo nuestra BD,debemos crear nuestra cionexion con la Bd.
+
+Podemos navegar a  traves d elos archivos.
+
+Para ello vamos a la carpeta
+
+/config/bd.php
+
+En este archivo modificamos los parametros de conexion con la BD
+
+host: localhost
+dbname: biblioteca
+username: 
+password:
+
+
+Con esto ya podemos trabanar con nuestro CRUD
+
+El SQL para nuestro ejemplo podria ser:
+
+CREATE TABLE crud_yii.libro (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	titulo VARCHAR(255) NULL,
+	imagen VARCHAR(2500) NULL
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_spanish_ci;
+
+
+
+

@@ -40,5 +40,8 @@ duplicamos home y sustituimos
     ['label' => 'Aplication', 'url' => ['/sitio/inicio']],
 
 
-con esto ya podemos ir estando en home hacia la aplciación.
+Con esto ya podemos ir estando en home hacia la aplciación.
+
+
+
 

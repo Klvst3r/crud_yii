@@ -1,0 +1,138 @@
+Una vez ya teniendo la vconfiguración con laBD
+
+Yii tiene un generador de BD y podra utilizarse un generador de BD.
+
+Gii es esa herramienta.
+
+Para acceder al generador
+    http://localhost:7000/index.php?r=gii
+
+Realmente Gii es un generador de todo tipo, ya que puede generar lo que es formularios, modelos, CRUD, que es la parte medular, ya qwue sin el crud no podremos alimentar la Bd.
+
+Para ver como se genera un CRUD, 
+
+Y veremos el asistente, para crear el crud necesitamos un modelo, el modelo es todo lo que nos va a permitir que elementos, tiene la tabla, por ejemplo.
+
+nombre de la tabla: libros
+
+
+Despues de ello, tendremos que crear el modelo: Libro
+
+La tabla y el modelo es la clase para referenciar a la clase o manipularla.
+
+Lo que va a ser el generador y como practica es que el nombre del modelo sea en singular.
+
+ Cuando damos de alta estos dos datos. y lo que es el modelo y hacer en preview y nos daremos cuenta que se generaran los archivos necesarios para que funcione
+
+
+ El archivo que se genera automaticamente es Libro.php y se encuentra en
+
+ /models\Libro.php
+
+ Con este modelo, vamos a darle en generar y aparce el la parte de abajo que el modelo se aha creado
+
+
+ Pulsamos el boton de generar
+
+ Aparece el siguiente salida:
+
+
+ The code has been generated successfully.
+
+Generating code using template "/home/klvst3r/dev/yii/crud_yii/vendor/yiisoft/yii2-gii/src/generators/model/default"...
+generated models/Libro.php
+done!
+
+Indicando que el modelo se ha creado y ha uilizdo el nombre por default asignado.
+
+Ahora vamos a CRUD generator copiando la clase delmodelos
+
+    models/Libro.php
+
+
+Vamos ahora a CRUD generator, y escribimos 
+
+1. En el capo Model Class, esto es la referencia de la aplicación.
+        
+        app\models\Libro
+
+2. en el campo Search Model Class
+        app\models\LibroSearch 
+
+
+en este caso, lo unico es que va a hacer es crear la clase que controla la busqueda, aunque es una combianción de ingles y español, asi que lo que esta en español es propiamiente d elo que estamos hablando.
+
+
+3. En Class Controller, ponemos el nombre del controlador
+
+    app\controllers\LibroController
+
+4. En View Path, para crear la vista libro
+    @app/views/libro    
+
+ahora    en preview, genera todos los archivos, genera el modelo, genera un formulario, un avista de busqeda, de creación, vista de lista, una vista de actualización y una vista de detalle del registro. Si todo esta correcto pulsamos en generar
+
+
+
+    Code File 	                        Action 	
+    controllers/LibroController.php 	create 	
+    models/LibroSearch.php 	            create 	
+    views/libro/_form.php 	            create 	
+    views/libro/_search.php 	        create 	
+    views/libro/create.php 	            create 	
+    views/libro/index.php 	            create 	
+    views/libro/update.php 	            create 	
+    views/libro/view.php 	            create 	
+
+
+
+Puilsando el boton generar:
+
+
+The code has been generated successfully.
+
+Generating code using template "/home/klvst3r/dev/yii/crud_yii/vendor/yiisoft/yii2-gii/src/generators/crud/default"...
+generated controllers/LibroController.php
+generated models/LibroSearch.php
+generated views/libro/_form.php
+generated views/libro/_search.php
+generated views/libro/create.php
+generated views/libro/index.php
+generated views/libro/update.php
+generated views/libro/view.php
+done!
+
+
+Ya tenemos creado nuestro crud, no llevo mucho tiempo
+
+
+Forma de acceder
+--------------------
+
+La forma de como estamos accediendo es:
+
+Por medio de la url 
+
+    http://localhost:7000/index.php?r=libro
+
+Ahora tenemos la vista para registrar
+
+
+Aprende php
+imagen.jpg
+
+
+En el registro podremos registrar los datos de un registro
+
+y nos retornara la vista de salida de creación de registro
+
+http://localhost:7000/index.php?r=libro%2Fview&id=1
+
+
+con esto ya tenemos la vista desplegada.
+
+Esta información es del registro insertada.
+
+El Libro, y tiene incluso los btones de acciones para poder borarla
+
+
