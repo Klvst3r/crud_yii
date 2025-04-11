@@ -1,0 +1,48 @@
+Teniendo nuestro CRUd tenemos que hacer unas modificaciones sobre todo para adjuntar una imagen, necesitamos las imagenes.
+
+
+    http://localhost:7000/index.php?r=libro%2Findex
+
+en el archivo 
+
+Creamos nuesva carpeta "uploads"
+
+web/uploads
+
+Ahora necesitamos un campo de archivo
+
+Para hacerlo
+
+En el modelo "Libro" ya generamos los diferentes roles de acuerdo a la tabla.
+
+Tenemos un campo imagen
+Sera reemplazar el campo de forma temporal 
+
+    Cambiando la validaciṕon del tipo de campo
+        
+    [['archivo'], 'file', 'extensions' => 'jpg,png'],
+
+Ademas en la clase se va a tener que declarar de forma publica un nmobre archivo
+
+    public $archivo;
+
+Que deben coincidir en el nombre. Por que se utilizar se requerira el archivo se mostrara en el formulario.
+
+El archivo sera el mismo. Ademas de eso tendemos quemostrar en los atributos de las etieuats tambien 
+
+
+son ls etiquetas para que el usuario tenga una indicación de que información va a caprturar.
+
+
+ahora la vista
+
+    Pero tenemos los formularios, ahi es donde tenemos que sustituir
+
+Partiendo de:
+    <?= $form->field($model, 'imagen')->textInput(['maxlength' => true]) ?>
+
+Transformaresmos a:
+    <?= $form->field($model, 'archivo')->fileInput() ?>        
+
+
+https://tsjtlaxcala.gob.mx/wp-content/uploads/2025/04/PJET_LPN_018_2025-CONVOCATORIA-1.pdf
