@@ -1,0 +1,99 @@
+Una ve ya tenendo el metodo de subirFoto
+
+nos vmos a la vista, no veremos ningun elemento alterado, modificamos la recepción, veremos que aun no sucede nada, por que ya hemos laterado la recepcion de los datos.
+
+
+Antes utilizaremos una clase llamada
+
+    use yii\web\UploadedFile;
+
+Esto ayudara a adjuntar la image y guardarl
+
+n esto tendremos una referencia del archivo y podramos adjuntarlo, donde se va a adjunar, en la carpeta uploads.
+
+
+Posicionados en el if
+
+    Dentro tenemos identificado que tenemos el modelo y este modelo recorre datos y los guarda.
+
+    Vamos a validar que los datos esten llegando y de ultimo hacemos al guardado.
+
+
+    if ($this->request->isPost) {
+            if ($model->load($this->request->post()) ) {
+
+                $model->save();
+
+
+    Antes debemos generar lo que es el archivo, detro de lo que es ela carpeta uploads.
+
+
+    Utilizamos el modelo y al archivo, que tendra un uloadedFile que sera una instancia que apartir de lo que es el modelo va a utilizar el campo archivo.
+
+
+
+                $model->archivo = UploadedFile::getInstance($model, 'archivo');
+
+El archivo sera un jpg, trabajaremos con este dato.
+
+en lugar del archivo manejaremos la ruta
+
+    $rutaArchivo = 'uploads/'.time."";
+
+Sera la ruta concatenada con el tiempo, para no reescribir la misma imagen, y tendra un tiempo antes de que sea subido.
+
+    $rutaArchivo = 'uploads/'.time()."_".$model->archivo->baseName.".".$model->archivo->extension;
+
+Puede que este largo el nombre con la extensión, lo que se esta haciendo es sobreescribiendo la ruta del archivo, estamos considerando:
+
+    - uploads\      Carpeta dstino
+    - time()        tiempo
+    - Nombre del archivo 
+    - extensión
+
+Esta ruta se carga directamente a lo que es nuestra carpeta, con el metodo que permitira guardar
+
+    $model->archivo->saveAs($rutaArchivo);
+
+Por ultimo dentro del metodo save el parametro sera falso para que no indique ningun error
+
+    $model->save(false);
+
+Recapitalundo ya podemos subir la fotografia utilizando "UploadesFile"
+
+    
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) ) {
+
+                $model->archivo = UploadedFile::getInstance($model, 'archivo');
+
+                $rutaArchivo = 'uploads/'.time()."_".$model->archivo->baseName.".".$model->archivo->extension;
+
+                $model->archivo->saveAs($rutaArchivo);
+
+                $model->save(false);
+
+
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+
+
+Generamos la ruta, yesa ruta hacemos que se guarde, por ultimo ejecutamos el metodo save, jutno con los datos se guarde.
+
+
+
+
+
+
+
+
+
+
+
+
+

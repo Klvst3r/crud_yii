@@ -1,0 +1,52 @@
+Instanciar proyecto Yii de repositorio
+
+
+PAra poder instalanciar un proyecto de Yii regularmente trabajaremos con la version 7.4 de PHP 
+
+Como segundo proceso devemos descargar y configurar el proyecto clonado.
+
+Ya clonado el proyecto debemos verificar si composer instainstalado.
+
+
+1. Verifica si composer está instalado
+
+Ejecuta el siguiente comando para comprobar si tienes Composer instalado:
+
+composer --version
+
+Si no está instalado, instálalo con:
+
+sudo apt update
+sudo apt install composer
+
+O bien, sigue las instrucciones en getcomposer.org.
+
+
+
+2. Instala las dependencias de Composer
+
+Navega a la carpeta del proyecto e instala las dependencias:
+
+cd /home/klvst3r/dev/siisej/siisec-modif
+composer install
+
+El proceso en oacaiones nos abliga a tener instalada la libreria GD para ello podremos recurrir al recurso de ayuda para su instalación y poder regresar hasta este punto para poder instanciarlo nuevamente
+
+Problemas a resulver
+
+
+Despues del proceso anterior cuando intentamos levantar el servidor para este proyecto nos puede arrojar la siguiejte salida:
+
+
+	php yii serve --port=6000
+	PHP Warning:  require(/home/klvst3r/dev/siisej/siisec-modif/config/params.php): failed to open stream: No such file or directory in /home/klvst3r/dev/siisej/siisec-modif/config/console.php on line 3
+	PHP Fatal error:  require(): Failed opening required '/home/klvst3r/dev/siisej/siisec-modif/config/params.php' (include_path='.:/usr/share/php') in /home/klvst3r/dev/siisej/siisec-modif/config/console.php on line 3
+
+El error indica que falta el archivo params.php en la ruta:
+
+/home/klvst3r/dev/siisej/siisec-modif/config/params.php
+Por lo que ingrasamos a la carpeta de configuracion
+	config y copiamos el archivo de ejemplo
+
+		$ cd config
+		$ cp params

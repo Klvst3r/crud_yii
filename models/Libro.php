@@ -31,7 +31,7 @@ class Libro extends \yii\db\ActiveRecord
         return [
             [['titulo', 'imagen'], 'default', 'value' => null],
             [['titulo'], 'string', 'max' => 255],
-            [['archivo'], 'file', 'extensions' => 'jpg,png'],
+            [['archivo'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif'],
         ];
     }
 

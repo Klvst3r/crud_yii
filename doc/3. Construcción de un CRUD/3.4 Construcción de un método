@@ -1,0 +1,82 @@
+Para guardar lo que es la foto grafia, trabajaremos primero con el controlador
+
+controllers/Lirbocontroller.php
+
+Recodando que en los metodos de los controladores
+
+se utiliza la palabra action, despues del metodo, cada uno de los mtodo tendra la palabra action
+ej
+
+    actionCreate
+    actionEdit
+    ActionDelete
+    findModel
+
+Primero se identifica el metodo
+    actionCreate
+
+Verificando la recepcion de los datos por el metodo post
+
+     if ($model->load($this->request->post()) && $model->save()) {
+
+Aca el request->post()  y save()
+
+
+La ecepcion se hace por medio de :
+    ($model->load($this->request->post())
+
+
+Lo oque hace es obtener la información del post y a traves del metodo safe, despues se redirecciona la vista de view, y con esto se envia información para ver la información insertada.
+
+El cambio es crear un metodo para update como es el actionCreate
+Lo vamos a generar de forma generica, es dcir para que lo utilice cualquier metodo cualquiera y amos a empezar empezando un metodo de tipo protected
+
+    protected function susbirFoto(){
+        
+    }
+
+
+No se utilizara la convencion action para poder utilizarlo posteriormente para recoger los datos de una fotogafia
+
+Este metodo declarado
+
+    Libro $model
+
+Se puiede pasar directamente el modelo, ya con este metodo, desde el metodo cretaed, se valida la informción de que algo se envio, lo mismo se hace para nuestro nuevo metodo.
+
+
+Le vamos a pasar todo el modelo, 
+
+ya creado el metodo se puede utilizar pasarle el modelo de la siguente forma:
+
+        public function actionCreate()
+    {
+        $model = new Libro();
+
+        $this->susbirFoto($model);
+        ....
+
+
+Esto se va a encargar de crear el modelo y posteriormente subir la inforamción.
+
+con esto se reemplaza todo y se mete directamente, como se va a duntar la imagen, tanto en el creates como en el updated, entonces 
+
+
+
+    protected function susbirFoto(Libro $model){
+        
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+    }
+
+
+
+Con esto lo podre utilizar en cualquier lado, ya sea en created o en updated
+
+
+soporte bicicleta auto usadosoporte bicicleta auto usado

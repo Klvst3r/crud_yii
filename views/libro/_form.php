@@ -10,7 +10,8 @@ use yii\widgets\ActiveForm;
 
 <div class="libro-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <!-- Agregamos el parametro para que el formulari permita subir archivos -->
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'titulo')->textInput(['maxlength' => true]) ?>
 

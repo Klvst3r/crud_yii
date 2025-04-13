@@ -8,6 +8,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use app\controllers\yii;
+
+//Clase para crar una referencia del archivo que se va a adjuntar a la carpeta uploads
+use yii\web\UploadedFile;
+
 /**
  * LibroController implements the CRUD actions for Libro model.
  */
@@ -69,6 +74,27 @@ class LibroController extends Controller
     {
         $model = new Libro();
 
+        //$this->subirFoto($model);
+
+        if ($model->load(\Yii::$app->request->post())) {
+
+            $model->archivo = UploadedFile::getInstance($model, 'archivo');
+    
+            if ($model->archivo) {
+                $rutaArchivo = 'uploads/' . time() . "_" . $model->archivo->baseName . "." . $model->archivo->extension;
+                $model->archivo->saveAs($rutaArchivo);
+                $model->imagen = $rutaArchivo; // Aquí se guarda el path en la BD
+            }
+    
+            if ($model->save(false)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+
+        //En su lugar vamos a utilizar subirFoto
+        //Esto se va para el metodo subirFoto, para tenerlo a disposición
+        /*
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -76,6 +102,9 @@ class LibroController extends Controller
         } else {
             $model->loadDefaultValues();
         }
+            */
+
+        
 
         return $this->render('create', [
             'model' => $model,
@@ -131,4 +160,26 @@ class LibroController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    protected function subirFoto(Libro $model){
+
+      
+            if ($model->load($this->request->post()) ) {
+
+                $model->archivo = UploadedFile::getInstance($model, 'archivo');
+
+                $rutaArchivo = 'uploads/'.time()."_".$model->archivo->baseName.".".$model->archivo->extension;
+
+                $model->archivo->saveAs($rutaArchivo);
+
+                $model->save(false);
+
+
+
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+       
+    }
+
 }
