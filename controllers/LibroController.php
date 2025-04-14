@@ -74,38 +74,20 @@ class LibroController extends Controller
     {
         $model = new Libro();
 
-        //$this->subirFoto($model);
-
-        if ($model->load(\Yii::$app->request->post())) {
-
-            $model->archivo = UploadedFile::getInstance($model, 'archivo');
-    
-            if ($model->archivo) {
-                $rutaArchivo = 'uploads/' . time() . "_" . $model->archivo->baseName . "." . $model->archivo->extension;
-                $model->archivo->saveAs($rutaArchivo);
-                $model->imagen = $rutaArchivo; // Aquí se guarda el path en la BD
-            }
-    
-            if ($model->save(false)) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
-
-
-        //En su lugar vamos a utilizar subirFoto
-        //Esto se va para el metodo subirFoto, para tenerlo a disposición
+        // Llamamos a subirFoto y verificamos si devuelve una respuesta (como redirect)
         /*
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+            Al enviar el formulario, se llama a subirFoto().
+            Si el modelo se guarda exitosamente, redirige automáticamente a index.
+            Si no se guarda (por ejemplo, error de validación), se muestra de nuevo el formulario.
+        */
+        $resultado = $this->subirFoto($model);
+
+        // Si se retorna un resultado (como redirect), lo devolvemos
+        if ($resultado !== null) {
+            return $resultado;
         }
-            */
 
-        
-
+        // Si no hubo envío de formulario (GET), se muestra el formulario
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -164,20 +146,56 @@ class LibroController extends Controller
 
     protected function subirFoto(Libro $model){
 
+      /*
+      Validamos los datos que esten llgenaod y despues hacemos un guardado, permitiendo generar el archivo dentro de la
+      Carpeta uploads con el dato del archivo, ya que en le modelo archivo, 
+      - Iniciamos con la carpeta 
+      - Integramos el tiempo,
+      - Nombe del archivo desde su nombre baseName el nombre del archivo original
+      - punto y la extensión igual del model pero del archivo que nos esta dando
       
+      Con esto estamos reescribiendo el nombre del archivo para evitar duplicaciones.
+
+     Al guardar tenemos el parametro false para que no genere error.
+      */
+
             if ($model->load($this->request->post()) ) {
 
                 $model->archivo = UploadedFile::getInstance($model, 'archivo');
 
-                $rutaArchivo = 'uploads/'.time()."_".$model->archivo->baseName.".".$model->archivo->extension;
+                //Validamos existencia del archivo
+                if($model->validate()){
+                    //Validacion de entrada
+                    if($model->archivo){
+                        //Pasamos la ruta del archivo y su nombre
+                        $rutaArchivo = 'uploads/'.time()."_".$model->archivo->baseName.".".$model->archivo->extension;
 
-                $model->archivo->saveAs($rutaArchivo);
+                        //Validamos si el archivo esta adjunto, ya se logro guardar
+                        if($model->archivo->saveAs($rutaArchivo)){
 
-                $model->save(false);
+                            //Actualizamos la ruta del archivo
+                            $model->imagen=$rutaArchivo;
+
+                            
+                        }
+
+                    }
+                }
 
 
+                //Ahora vamos a asaber si se guardo
+                if($model->save(false) ){
+                    //se redirecciona si hubo un guardado, unicamente a index.
+                    //Ya que index es la lista donde se muestran los libros
+                    return $this->redirect(['index']);
 
-                return $this->redirect(['view', 'id' => $model->id]);
+
+                }
+
+                //return $this->redirect(['view', 'id' => $model->id]);
+
+                //En su lugar retornamos No hacer nada si no hay POST o falló el guardado
+            return null;
             }
        
     }

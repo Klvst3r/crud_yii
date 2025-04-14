@@ -1,0 +1,479 @@
+Como tengo ya cierta información en la BD, partiendo de la cnstrucción de un CRUD, deseo poder subir mi Bd o la estructura de mi BD para poder reconstruir desde otro sistema a traves de la instancia de mi proyecto.
+
+Para ello En Yii2 no existe de forma nativa un sistema de seeder como en Laravel, pero sí se puede respaldar y reconstruir la base de datos con migraciones y algunos trucos extra. Aquí te dejo varias formas de hacerlo, según lo que necesites:
+
+Primera forma:
+
+1. Respaldar y reconstruir la estructura de la base de datos (Migraciones)
+
+Yii2 tiene su sistema de migraciones, que te permite escribir scripts PHP para crear/modificar tablas:
+
+Crear una migración:
+
+    $ php yii migrate/create create_tabla_libro
+
+Esto genera un archivo en migrations/ con métodos up() y down(). En el up() defines cómo crear la tabla:
+
+    public function up()
+    {
+        $this->createTable('libro', [
+            'id' => $this->primaryKey(),
+            'titulo' => $this->string()->notNull(),
+            'imagen' => $this->string(),
+            'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
+        ]);
+    }
+
+Y down() puede eliminarla para revertir la migración:
+
+    public function down()
+    {
+        $this->dropTable('libro');
+    }
+
+
+Para poder aplicar las migraciones (en otro equipo):
+
+    $ php yii migrate
+
+
+
+
+Exportar los datos almacenados
+--------------------
+
+Yii2 no trae un sistema de seeders por defecto, pero se puede simular así:
+
+
+Crear una clase de datos iniciales:
+------
+
+Se puede crear un comando personalizado en console/controllers/ como SeedController.php, o un archivo PHP simple para insertar datos en la tabla.
+
+namespace console\controllers;
+
+use yii\console\Controller;
+use app\models\Libro;
+
+class SeedController extends Controller
+{
+    public function actionLibro()
+    {
+        $libro = new Libro();
+        $libro->titulo = 'Libro de prueba';
+        $libro->imagen = 'uploads/ejemplo.jpg';
+        $libro->save(false);
+
+        echo "Libro de prueba insertado.\n";
+    }
+}
+
+Y lo corres así:
+
+    $ php yii seed/libro
+
+
+Para poder hacer este proceso tenemos que considerar el siguiente procedimiento que es una receta paso a paso de ocmo construir lo que simularia a nuestro seeder, que no es otra cosa que un archvio para controlador para poder tener la informaciṕon de la BD que etsmao strabajando actualmente.
+
+
+PASO A PASO para crear un Seeder en Yii2
+------------------------------------------
+1. Ubicación del archivo
+
+Vamos al proyecto Yii2 y entramos a la ruta siguiente:
+
+    /console/controllers
+
+Ahí vas a crear un nuevo archivo llamado:
+
+    SeedController.php
+
+2. Contenido del archivo SeedController.php
+
+Copiamos y pega este contenido para insertar un libro en tu base de datos:
+
+        <?php
+
+        namespace console\controllers;
+
+        use yii\console\Controller;
+        use app\models\Libro;
+
+        class SeedController extends Controller
+        {
+            /**
+            * Inserta libros de prueba
+            */
+            public function actionLibro()
+            {
+                $libro = new Libro();
+                $libro->titulo = 'Libro de prueba';
+                $libro->imagen = 'uploads/ejemplo.jpg'; // asegúrate de que esta ruta exista o sea válida
+                $libro->save(false); // usamos false para saltar validaciones
+
+                echo "Libro de prueba insertado.\n";
+            }
+        }
+
+Puedemos duplicar esa lógica para insertar varios registros.
+
+3. Ejecutar el comando desde consola
+
+Abrimos la terminal y navega al root del proyecto (donde está el archivo yii) y ejecuta:
+
+    $ php yii seed/libro
+
+Esto ejecutará el método actionLibro() de tu nuevo controlador SeedController.
+4. (Opcional) Agregar varios registros
+
+Puedes repetir new Libro() varias veces o incluso usar un for para insertar 10, 50 o 100 registros de prueba.
+
+for ($i = 1; $i <= 10; $i++) {
+    $libro = new Libro();
+    $libro->titulo = "Libro de prueba $i";
+    $libro->imagen = "uploads/ejemplo$i.jpg";
+    $libro->save(false);
+}
+
+
+
+Este archivo no tiene la información de mi tabla Libro, por lo que debo simular mi Seeder Manual con los datos reales de nuestra tabla libro, puedemos construir nuestro archivo scripts/SeedLibro.php con esos mismos valores, sin necesidad de generarlos aleatoriamente.
+
+Aquí te dejo el archivo ajustado con los datos reales iniiales por lo menos para este ejercicio:
+
+
+Seeder Manual para reconstruccion de la tabla libro
+---------------------------------------------------
+
+scripts/SeedLibro.php con tus datos
+
+        <?php
+
+        use app\models\Libro;
+        use yii\console\Application;
+
+        // Cargar el entorno de Yii2
+        require __DIR__ . '/../vendor/autoload.php';
+        require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+
+        // Cargar configuración de consola
+        $config = require(__DIR__ . '/../config/console.php');
+
+        // Crear la aplicación de consola (para poder usar los modelos)
+        new Application($config);
+
+        // Datos reales a insertar
+        $libros = [
+            ['titulo' => 'PHP', 'imagen' => 'imagen.png'],
+            ['titulo' => 'Iniciando a Programar con Python', 'imagen' => 'uploads/1744556018_python.jpg'],
+            ['titulo' => 'Eloquent Javascript', 'imagen' => 'uploads/1744612373_js.jpg'],
+        ];
+
+        // Insertar los registros
+        foreach ($libros as $i => $data) {
+            $libro = new Libro();
+            $libro->titulo = $data['titulo'];
+            $libro->imagen = $data['imagen'];
+
+            if ($libro->save(false)) {
+                echo "✅ Libro '{$libro->titulo}' insertado correctamente.\n";
+            } else {
+                echo "❌ Error al insertar '{$libro->titulo}'.\n";
+            }
+        }
+
+
+
+Este procedimiento es util si tenemos una instalación que no sea la basica si no que ya tiene mayor complementos en las carpetas.
+
+En nuestro caso hemos partido desde una plantilla "basic" y esta carpeta no existe por lo que vamos a tomar el siguiete camino:
+
+
+ Si estamos trabajando con una instalación básica de Yii2 (la plantilla basic), entonces no viene con la carpeta console/ por defecto. Esa estructura viene solo en la versión advanced de Yii2.
+
+Pero no debemos preocuparnos, vamos a explicar cómo adaptarlo a nuestro proyecto:
+
+
+Crear el Seeder de nuestra información de a Bd, a partir de nuestra plantilla basic
+-------------------------------------------------------------------------------------
+
+1: Crear comando tipo seeder en un script PHP
+
+Ya que estmos usando la plantilla basic, podemos crear un archivo PHP en la raíz de nuestro proyecto o en una carpeta como scripts/ o tools/.
+
+
+Estructura recomendada
+---
+
+Vamos a crea una carpeta en la raíz de nuestro proyecto (si no tenemos una):
+
+    /scripts/SeedLibro.php
+
+
+
+Contenido del archivo SeedLibro.php:
+
+<?php
+
+use app\models\Libro;
+use yii\console\Application;
+
+// Carga el entorno de Yii2 (solo si no es llamado desde web)
+require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+
+// Cargar la configuración de consola
+$config = require(__DIR__ . '/../config/console.php');
+
+// Crear la aplicación de consola (necesaria para usar los modelos)
+new Application($config);
+
+// Aquí agregamos datos de prueba
+for ($i = 1; $i <= 10; $i++) {
+    $libro = new Libro();
+    $libro->titulo = "Libro de prueba $i";
+    $libro->imagen = "uploads/prueba$i.jpg"; // Asegúrate que esta ruta sea válida
+    $libro->save(false);
+    echo "✅ Libro $i insertado.\n";
+}
+
+
+Aunque tenemos un archivo  scripts/SeedLibro.php completo y funcional, como es el que sigue:
+
+    <?php
+
+    use app\models\Libro;
+    use yii\console\Application;
+
+    // Cargar Yii2 y la configuración de consola
+    require __DIR__ . '/../vendor/autoload.php';
+    require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+    $config = require(__DIR__ . '/../config/console.php';
+
+    // Crear aplicación de consola (necesaria para usar modelos)
+    new Application($config);
+
+    // Insertar datos de prueba
+    for ($i = 1; $i <= 10; $i++) {
+        $libro = new Libro();
+        $libro->titulo = "Libro de ejemplo $i";
+        $libro->imagen = "uploads/ejemplo$i.jpg"; // Puedes poner rutas reales o simuladas
+
+        if ($libro->save(false)) {
+            echo "✅ Libro $i insertado correctamente.\n";
+        } else {
+            echo "❌ Error al insertar libro $i.\n";
+        }
+    }
+
+
+ Cómo ejecutarlo desde consola
+
+Desde la raíz de tu proyecto (donde está el archivo yii), ejecuta:
+
+    $ php scripts/SeedLibro.php
+
+
+Para eviatar duplicacion de registros con información de ejemplo vmos a cmplementar este script con una eliminación previa de los datos de prueba
+
+scripts/SeedLibro.php con eliminación previa
+
+        <?php
+
+        use app\models\Libro;
+        use yii\console\Application;
+        use yii\db\Expression;
+
+        // Cargar el entorno de Yii2
+        require __DIR__ . '/../vendor/autoload.php';
+        require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+
+        // Cargar configuración de consola
+        $config = require(__DIR__ . '/../config/console.php');
+
+        // Crear la aplicación de consola (para poder usar los modelos)
+        new Application($config);
+
+        // Datos reales a insertar
+        $libros = [
+            ['titulo' => 'PHP', 'imagen' => 'imagen.png'],
+            ['titulo' => 'Iniciando a Programar con Python', 'imagen' => 'uploads/1744556018_python.jpg'],
+            ['titulo' => 'Eloquent Javascript', 'imagen' => 'uploads/1744612373_js.jpg'],
+        ];
+
+        // Recorremos cada libro para eliminar si ya existe y luego insertar
+        foreach ($libros as $data) {
+            // Buscar y eliminar si ya existe un libro con el mismo título
+            $libroExistente = Libro::findOne(['titulo' => $data['titulo']]);
+            if ($libroExistente !== null) {
+                $libroExistente->delete();
+                echo "🗑️ Libro '{$data['titulo']}' eliminado (preexistente).\n";
+            }
+
+            // Insertar el nuevo libro
+            $libro = new Libro();
+            $libro->titulo = $data['titulo'];
+            $libro->imagen = $data['imagen'];
+
+            if ($libro->save(false)) {
+                echo "✅ Libro '{$libro->titulo}' insertado correctamente.\n";
+            } else {
+                echo "❌ Error al insertar '{$libro->titulo}'.\n";
+            }
+        }
+
+
+
+Ahora podemos ejecutarlo, desde la terminal, ejecuta:
+
+    $ php scripts/SeedLibro.php
+
+Este script:
+
+    - Revisa si ya existe un libro con el mismo titulo.
+    - Si existe, lo elimina.
+    - Inserta el nuevo registro con ese mismo título e imagen.
+
+
+Extra opcional: ¿Quieremos limpiar toda la tabla libro antes de insertar?
+
+En lugar de eliminar solo por título, puedes vaciar toda la tabla así:
+
+Libro::deleteAll();
+echo "🧹 Tabla 'libro' vaciada completamente.\n";
+
+Quedando nuestro script de la siguiente manera:
+
+
+Elimina todos y luego inserta
+
+    <?php
+
+    use app\models\Libro;
+    use yii\console\Application;
+
+    // Cargar Yii y la configuración
+    require __DIR__ . '/../vendor/autoload.php';
+    require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+    $config = require(__DIR__ . '/../config/console.php');
+    new Application($config);
+
+    // 🧹 Limpiar toda la tabla 'libro'
+    Libro::deleteAll();
+    echo "🧹 Tabla 'libro' vaciada completamente.\n";
+
+    // 📚 Datos reales para insertar
+    $libros = [
+        ['titulo' => 'PHP', 'imagen' => 'imagen.png'],
+        ['titulo' => 'Iniciando a Programar con Python', 'imagen' => 'uploads/1744556018_python.jpg'],
+        ['titulo' => 'Eloquent Javascript', 'imagen' => 'uploads/1744612373_js.jpg'],
+    ];
+
+    // 🚀 Insertar cada registro
+    foreach ($libros as $data) {
+        $libro = new Libro();
+        $libro->titulo = $data['titulo'];
+        $libro->imagen = $data['imagen'];
+
+        if ($libro->save(false)) {
+            echo "✅ Libro '{$libro->titulo}' insertado correctamente.\n";
+        } else {
+            echo "❌ Error al insertar '{$libro->titulo}'.\n";
+        }
+    }
+
+
+
+
+
+
+Nota: sobre /config/console.php
+-----
+
+Como estamos en la plantilla basic, probablemente no tengas el archivo config/console.php.
+
+
+Este archivo es necesaio aun por lo que el archivo config/console.php sí es necesario cuando vamos a correr scripts fuera del contexto web (como scripts/SeedLibro.php), porque Yii necesita saber cómo inicializar la aplicación de consola, incluyendo la conexión a la base de datos.
+
+La propuesta de archivo está correcta y es suficiente para este caso. Debemos asegúra de que los archivos params.php y db.php existan y estén bien configurados (generalmente ya vienen creados en un proyecto Yii básico).
+
+
+En ese caso, puedes copiar tu archivo web.php y modificarlo un poco para consola:
+📄 Crear config/console.php (adaptado desde web.php):
+
+<?php
+
+$params = require __DIR__ . '/params.php';
+$db = require __DIR__ . '/db.php';
+
+return [
+    'id' => 'app-console',
+    'basePath' => dirname(__DIR__),
+    'bootstrap' => [],
+    'components' => [
+        'db' => $db,
+    ],
+    'params' => $params,
+];
+
+✅ Ejecutar el script desde terminal
+
+php scripts/SeedLibro.php
+
+Esto ejecutará el código y te insertará los registros en la base de datos.
+
+
+
+Verificamos la estructura de nuestro proyect hasta este punto
+
+Tu estructura de nuestro proyecto debería lucir más o menos así:
+
+/mi-proyecto/
+├── config/
+│   ├── console.php ✅
+│   ├── db.php ✅
+│   ├── params.php ✅
+│   └── web.php
+├── models/
+│   └── Libro.php
+├── scripts/
+│   └── SeedLibro.php ✅
+├── vendor/
+└── ...
+
+
+Con esto puedes ejecutar:
+
+php scripts/SeedLibro.php
+
+
+El codigo propuesto de modificar:
+
+    $params = require __DIR__ . '/params.php';
+    $db = require __DIR__ . '/db.php';
+
+    return [
+        'id' => 'app-console',
+        'basePath' => dirname(__DIR__),
+        'bootstrap' => [],
+        'components' => [
+            'db' => $db,
+        ],
+        'params' => $params,
+    ];
+
+Este  fragmento ya está representado correctamente dentro de nuestro config/console.php, solo que más completo (con log, cache, alias, módulos, etc.), lo cual es correcto y deseable.
+
+En resumen:
+
+    NO necesitamos agregar ese código a config/web.php.
+
+    Ese código es una versión básica del config/console.php, útil como plantilla inicial.
+
+    Ya tenemos config/console.php correctamente armado, así que lo puedes usar así como está.
+
+Podemos ejecutar:
+
+    $ php scripts/SeedLibro.php
+
+Para tener nuestra información rescronstruida en la Bd    
