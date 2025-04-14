@@ -1,0 +1,31 @@
+ahora que ya tenemos limpio el registro en este caso ya tenemos nuestro proyecto vamos a proceder buscando el metodo que permite borrar.
+
+
+actionDelete
+
+Lo que hace es borra la ifnormación del id proporcionado.
+
+Estando en el main, desde la opcion borrar, vamos a crear nuestro borrado a partir de que cuando el usuario de clcik el archivo de la imagen se borre.
+
+Asi nosotros podamos identificar el archivo que existe en la carpeta de uploads.
+
+si lo borramos y no existe va a marcar un error.
+
+Lo primero que tenemos que hacer, asi que lo que tenemos que realmente preguntar es si es el libro existe en la carpeta uploas.
+
+Asi que dentro del metodo de borar, ya se recupero la información del archivo.
+
+
+     public function actionDelete($id)
+        {
+            $this->findModel($id)->delete();
+
+            return $this->redirect(['index']);
+        }
+
+De acuerdo al generador del curd con la acción de borrado, buscando la información de lo que es ese registro, esta información trae muchos datos y enc oncreto lo vamos a utilizar para hacer los iguinte.
+
+Una vez que se busque el registro lo dbemeos almacenar en modelo y este modelo vamos a preguntar si tiene el dato de imagen y si existe en la ruta de lo que es el archivo.
+
+Vamos a ello
+

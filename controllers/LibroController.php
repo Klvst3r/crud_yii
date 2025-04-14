@@ -122,7 +122,26 @@ class LibroController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        //Primero lo recuperado lo alamacenara en el modelo
+        //$this->findModel($id);
+        $model = $this->findModel($id);
+
+        //Posterior a ello vamos a preguntar si tiene el dato imagen y si ese dato existe en lo que es la ruta de lo que es el archivo
+        if(file_exists($model->imagen) ){
+
+            //Hacemos una isbtruccion onlink y que permitira tener ese borado
+            //Recordando que $model tiene todos los datos, rutas
+            unlink($model->imagen);
+
+            //Con esto la imagen se va a borra si encuentra en la carpeta de uploas
+            // y una vez que se bore el archivo lo que se hace es borra el registro con la siguiente instrucción
+            // Asi no solo se botrrara en la Bd sino que se va a borrar fisicamente con el siguiente comando
+            $model->delete();
+
+        }
+
+        
+        
 
         return $this->redirect(['index']);
     }
