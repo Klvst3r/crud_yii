@@ -151,13 +151,13 @@ class LibroController extends Controller
 
             //Hacemos una isbtruccion onlink y que permitira tener ese borado
             //Recordando que $model tiene todos los datos, rutas
-            unlink($model->imagen);
+            unlink($model->imagen);             
+            //Con esto la imagen se va a borra si encuentra en la carpeta de uploas
 
 
         }
 
-        //Con esto la imagen se va a borra si encuentra en la carpeta de uploas
-            // y una vez que se bore el archivo lo que se hace es borra el registro con la siguiente instrucción
+            // y una vez que se borre el archivo lo que se hace es borra el registro con la siguiente instrucción
             // Asi no solo se botrrara en la Bd sino que se va a borrar fisicamente con el siguiente comando
             $model->delete();
 
