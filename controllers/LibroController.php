@@ -93,6 +93,9 @@ class LibroController extends Controller
         ]);
     }
 
+
+
+
     /**
      * Updates an existing Libro model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -103,15 +106,32 @@ class LibroController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+    
+        // Guarda temporalmente la imagen anterior antes de que sea sobreescrita
+        $imagenAnterior = $model->imagen;
+    
+        // Si se está haciendo POST
+        if ($this->request->isPost) {
+            // Subimos la nueva foto (si la hay) y guardamos
+            $this->subirFoto($model);
+    
+            // Si hay imagen anterior y es distinta a la nueva, eliminamos la anterior
+            if ($imagenAnterior && $imagenAnterior !== $model->imagen && file_exists($imagenAnterior)) {
+                unlink($imagenAnterior);
+            }
+    
+            // Ya redirige dentro de subirFoto si todo fue bien
+            return; // Importante para no volver a renderizar la vista
         }
-
+    
+        // Si no es POST, simplemente muestra el formulario de edición
         return $this->render('update', [
             'model' => $model,
         ]);
     }
+    
+
+    
 
     /**
      * Deletes an existing Libro model.
@@ -133,12 +153,13 @@ class LibroController extends Controller
             //Recordando que $model tiene todos los datos, rutas
             unlink($model->imagen);
 
-            //Con esto la imagen se va a borra si encuentra en la carpeta de uploas
+
+        }
+
+        //Con esto la imagen se va a borra si encuentra en la carpeta de uploas
             // y una vez que se bore el archivo lo que se hace es borra el registro con la siguiente instrucción
             // Asi no solo se botrrara en la Bd sino que se va a borrar fisicamente con el siguiente comando
             $model->delete();
-
-        }
 
         
         
@@ -186,6 +207,9 @@ class LibroController extends Controller
                 if($model->validate()){
                     //Validacion de entrada
                     if($model->archivo){
+                        //si existe un archivo adjunto, borra ese archivo  y despues adjuntarlo a lo que es carpeta.
+
+
                         //Pasamos la ruta del archivo y su nombre
                         $rutaArchivo = 'uploads/'.time()."_".$model->archivo->baseName.".".$model->archivo->extension;
 
@@ -208,14 +232,13 @@ class LibroController extends Controller
                     //Ya que index es la lista donde se muestran los libros
                     return $this->redirect(['index']);
 
-
                 }
 
-                //return $this->redirect(['view', 'id' => $model->id]);
-
-                //En su lugar retornamos No hacer nada si no hay POST o falló el guardado
-            return null;
+                
             }
+            //return $this->redirect(['view', 'id' => $model->id]);
+            //En su lugar retornamos No hacer nada si no hay POST o falló el guardado
+            return null;
        
     }
 

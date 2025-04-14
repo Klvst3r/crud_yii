@@ -1,0 +1,81 @@
+ahora como ya tenemos la información lo faltante es la opcion de editar.
+
+Para editar la infroamción tenemos que identificar dos cosas
+
+cuando damos click en la vista save, lo que se hace es eliminar el archivo si existiera el archivo, es dcir que un rgeistro solamente tenga el titulo del libro y no tenga un archivo.
+
+Pero tenemos que saber si ese registro contiene un archivo y si es asi se tiene que hacer un borrado.
+
+
+Para ello vamos a indentificar en el metodo update. se hace tambien la validación del tro del metodo actionupdate
+
+ public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+
+Es avalidación se encuentra en estas lineas
+    if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+Tanto del post y del envio de datos, ademas de ello se hace la vaiación del save y se hace la redirección. muy identico al metodo de creación.
+
+
+
+Prectiamente es lo mismo, la diferencia es que buscamos ese elemento y se hace la actualización.
+
+Etonces para hacer estos cambios solo vamos a necestar esa acción y hacer lo mismo que se hizo en create
+
+
+Para ello se elimina es avalidación y 
+
+
+Se hace lo mismo que en el metodo create, esta linea nos sirve para subir la fotografia, si existiera un cambio se sube
+        $this->subirFoto($model);
+
+Se actualiza, pero la foto grafia aun va a existir si se conserva en uploads, el archivo anterior, pero como ya hicimos el borrado asi que vamos a utlilizarlo
+
+Se va a utilizar cuando nosotros sepamos que ya existe el archivo, identificando el metodo subir foto, y dentro identificamos que existe el archivo, si existe el archivo.
+
+Lo que se hara es 
+
+
+ public function actionDelete($id)
+    {
+        //Primero lo recuperado lo alamacenara en el modelo
+        //$this->findModel($id);
+        $model = $this->findModel($id);
+
+        //Posterior a ello vamos a preguntar si tiene el dato imagen y si ese dato existe en lo que es la ruta de lo que es el archivo
+        if(file_exists($model->imagen) ){
+
+            //Hacemos una isbtruccion onlink y que permitira tener ese borado
+            //Recordando que $model tiene todos los datos, rutas
+            unlink($model->imagen);
+
+
+        }
+
+        //Con esto la imagen se va a borra si encuentra en la carpeta de uploas
+            // y una vez que se bore el archivo lo que se hace es borra el registro con la siguiente instrucción
+            // Asi no solo se botrrara en la Bd sino que se va a borrar fisicamente con el siguiente comando
+            $model->delete();
+
+        
+        
+
+        return $this->redirect(['index']);
+    }
+
+
+    
