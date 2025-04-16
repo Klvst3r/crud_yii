@@ -1,0 +1,25 @@
+Una vez que ya mostramos la imagen en index, 
+
+ahora cuando nosotros editamos la imagen no podemos ver ninguna imagen.
+
+entonces, vamos a ponerlo para ver cual es el detalle o como se va a a estra consultando la imagen.
+
+
+en la Vista index, ya se muestra la imagen, que es el GridView  que practicamente es la tabla, pero tambien tenemos en el formulario y en el formulario tambien muesra la ifnroamción que esta en el registro en la bd.
+
+entonces para mostrar la imagen hacemos.
+
+    <?= Html::img( $model->imagen, ['width' => '60px'] ) ?>
+
+    o bien 
+
+    <?php echo Html::img( $model->imagen, ['width' => '60px'] ) ?>
+
+Aca el dato es model, necesitamos lo que es la imagem y necesitamos lo que es una propiedad que es un ancho que es el tamaño de la imagen, que la va a redimensionar. Esta modificación es a nive de html, es decir le va a poner una propiedad.
+
+Le estamos indicando:
+
+    Pon una imagen html vas a utilizar el dato imagen con el modelo y ponle un ancho de 60px.
+
+    
+
