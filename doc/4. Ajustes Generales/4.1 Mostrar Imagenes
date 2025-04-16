@@ -1,0 +1,80 @@
+Ya adjuntamos la rutade la imagen , pero no podemos ver, ya que solo podemos ver las urls, entonces vamos a hacer que se vea, por que tenemos que irnos a la vista
+
+/views/libros/index.php
+
+
+Los datos se muesrran gracias a este GridView
+
+<?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'titulo',
+            'imagen',
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
+            ],
+        ],
+    ]); ?>
+
+
+Ahi vamos a tener una modificación.
+
+en la imagen, se sustituye pos un array con parametros siguientes:
+
+formato
+value
+
+Este value es el valor que se mostrara el valor de la imagen, que se mostrara en la columna.
+
+se pone como una funcion que vaa retornar información, se toma el valor de $data, que seria la ifnormacion del $dataProvider qeu va a a recibirse mediante $data, posteriormente lo vamos a necesitar ya que vamos a devolver un HTML en formao de imagen, va a tener $data->imagen es decir el campo imagen, vamos a poner unas propiedades.
+
+Ya que si subimos una imgen grande, esto cambiara a un tamaño d 60px, con esto se va a analizar y esto es una instancia.
+
+Estamos retornando un img en formato htm, cambiando el dato, las propiedases y asignamos todo este valor para que me retorne el valor de imagen y le ponga un tamaño de 60px, lo va a ubicar, y todo esto:
+
+[
+                'format' =>'html',
+                'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
+        
+        ],
+
+
+Seria el valor de esa columna, pero para queno quede duda, vamos a probar.
+
+Hay que considerar que la linea anterior es una instancia html, y directamente se coloco el metodo img.
+
+    'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
+
+Al final de la linea anterior lleva una coma por que es practicamente unas propiedades, de la columna.
+
+
+Ahora ya aparece la imagen del libro.
+
+en resumen para poder ver una imagen en lugar de la ruta de la imagen, sustituimos:
+
+     'imagen',
+
+Por:
+
+    [
+                'format' =>'html',
+                'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
+        
+        ],
+
+con esto tendriamos visible la imagen.
+
+
+
+
+
+
+
+
