@@ -1,0 +1,256 @@
+ahora vamos a revisar lo que es la interfaz.
+
+Ya vemos en el index, que tenemos varios items, si nosotros tenemos mas de 5 elementos, no vamos a tener una paginado, asiq ue vamos a utilizar un paginado.
+
+Necesitamos información para poder crear, asi que vamos a hacer esta paginación de acuerdo a lo que nosotros consideremos pertinente.
+
+Vamos a hacerlo con d3 tregistros-
+
+Entonces en la vista index, lo que vamos a hacer es navegar, a traves del index.
+
+
+en el GridView admquirimos información y es información se adquiere, utilizando ciertos parametros, entonces. Esos parametros tienen un DataProvider 
+
+Es información que realemnte llega, directamente de una base de datos, la configuración que se adquiere a traves de la bd, esta dada porl libros search que tiene todos los elementos necesarios para mostrar esa inforamción.
+
+Desde
+    /models/LibroSearch.php
+
+Entonces toda esa inforamción que viene de el ActiveDataProvider que es el que, saca realemente la inforamción.
+
+Entonces para que no quede duda lo que se esta haciendo con unpaginado.
+
+Vamos a ubicarnos en la lina donde dice ActiveDataProvider y ponemos simpelemnet lo que ponemos la paginación.
+
+y ponemos un valor page que es el tamaño de registros por ejem. 2
+
+Entonces vamos a actualiar con estemovimiento muy sencillo y dara el paginado.
+
+
+      $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination'=>['pageSize'=>1]
+        ]);
+
+
+Se agrega la linea:        
+
+    'pagination'=>['pageSize'=>1]
+
+Para dar un resultado entre uno y otro.
+
+simplemente se tienen dos registros, entonces la funcionalidad s muy sencilla y el Yii framework se encarga del paginado.
+
+
+
+
+Estilos en la paginación:
+-----------------------------
+
+
+or defecto, Yii2 usa un paginador simple con HTML básico. Pero puedes estilizarlo fácilmente con Bootstrap o incluso usar un paginador totalmente personalizado. 🎨
+✅ Opción 1: Usar Bootstrap 4/5 con LinkPager
+
+Si ya estás usando Bootstrap (como parte de tu layout o tema), puedes indicarle a Yii que el paginador use clases de Bootstrap.
+Dentro de tu GridView::widget (en index.php):
+
+Agrega o ajusta esta parte:
+
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'pager' => [
+        'class' => \yii\widgets\LinkPager::class,
+        'options' => ['class' => 'pagination justify-content-center'], // clase Bootstrap
+        'linkOptions' => ['class' => 'page-link'],
+        'activePageCssClass' => 'active',
+        'disabledPageCssClass' => 'disabled',
+        'pageCssClass' => 'page-item',
+        'prevPageLabel' => '«',
+        'nextPageLabel' => '»',
+    ],
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        'id',
+        'titulo',
+        [
+            'format' =>'html',
+            'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
+        ],
+        [
+            'class' => ActionColumn::class,
+            'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
+                return Url::toRoute([$action, 'id' => $model->id]);
+            },
+        ],
+    ],
+]); ?>
+
+✅ Opción 2: Estilos personalizados con CSS
+
+Si no estás usando Bootstrap pero igual quieres que se vea bien, puedes agregar en tu vista o layout un bloque de estilos como este:
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+}
+
+.page-item {
+    margin: 0 4px;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+🚀 Resultado
+
+Después de esto, el paginador se verá como botones estilizados, alineados, y con mejor apariencia visual — muy similar al paginador de Bootstrap que se usa en otros frameworks como Laravel o CodeIgniter.
+
+
+Esto entonces modificamos de esto:
+
+
+<?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'titulo',
+            [
+                'format' =>'html',
+                'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
+        
+        ],
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
+            ],
+        ],
+    ]); ?>
+
+
+
+
+A esto:
+
+
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'pager' => [
+        'class' => \yii\widgets\LinkPager::class,
+        'options' => ['class' => 'pagination justify-content-center'], // clase Bootstrap
+        'linkOptions' => ['class' => 'page-link'],
+        'activePageCssClass' => 'active',
+        'disabledPageCssClass' => 'disabled',
+        'pageCssClass' => 'page-item',
+        'prevPageLabel' => '«',
+        'nextPageLabel' => '»',
+    ],
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        'id',
+        'titulo',
+        [
+            'format' =>'html',
+            'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
+        ],
+        [
+            'class' => ActionColumn::class,
+            'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
+                return Url::toRoute([$action, 'id' => $model->id]);
+            },
+        ],
+    ],
+]); ?>
+
+
+Este estilo hace que se tenga un detale visual, que ocurre por que 
+
+ porque el paginador por defecto omite envolver el botón de navegación («) en una etiqueta con clases CSS cuando está deshabilitado (por ejemplo, en la primera página).
+
+Cuando avanzas a la página 2, el botón « (anterior) ya es funcional, y por eso se renderiza con las clases page-item y page-link de Bootstrap.
+✅ Solución: Forzar estilos de Bootstrap también para botones deshabilitados
+
+Debes asegurarte de que Yii aplique correctamente las clases a todos los elementos, incluso los deshabilitados. Para eso, puedes usar el siguiente ajuste en la configuración del pager:
+
+'pager' => [
+    'class' => \yii\widgets\LinkPager::class,
+    'options' => ['class' => 'pagination justify-content-center'],
+    'linkOptions' => ['class' => 'page-link'],
+    'activePageCssClass' => 'active',
+    'disabledPageCssClass' => 'disabled', // <- esta clase aplica al elemento <li> si está deshabilitado
+    'pageCssClass' => 'page-item',
+    'prevPageLabel' => '«',
+    'nextPageLabel' => '»',
+    'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link'], // <- agrega clase a botón deshabilitado
+],
+
+💡 ¿Qué hace disabledListItemSubTagOptions?
+
+Cuando el botón está desactivado (« en la primera página o » en la última), Yii genera algo como:
+
+<li class="disabled"><span>«</span></li>
+
+Con el cambio, lo forzamos a renderizar:
+
+<li class="page-item disabled"><a class="page-link">«</a></li>
+
+Así mantiene el estilo de Bootstrap incluso en los botones inactivos.
+
+
+Entonces se cambia el siguiente codigo:
+
+
+'pager' => [
+        'class' => \yii\widgets\LinkPager::class,
+        'options' => ['class' => 'pagination justify-content-center'], // clase Bootstrap
+        'linkOptions' => ['class' => 'page-link'],
+        'activePageCssClass' => 'active',
+        'disabledPageCssClass' => 'disabled',
+        'pageCssClass' => 'page-item',
+        'prevPageLabel' => '«',
+        'nextPageLabel' => '»',
+    ],
+
+
+Se cambia a :
+
+    'pager' => [
+    'class' => \yii\widgets\LinkPager::class,
+    'options' => ['class' => 'pagination justify-content-center'],
+    'linkOptions' => ['class' => 'page-link'],
+    'activePageCssClass' => 'active',
+    'disabledPageCssClass' => 'disabled', // <- esta clase aplica al elemento <li> si está deshabilitado
+    'pageCssClass' => 'page-item',
+    'prevPageLabel' => '«',
+    'nextPageLabel' => '»',
+    'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link'], // <- agrega clase a botón deshabilitado
+],
+
+
+
+
+
+Con esto se mostrara a que todo el gridview este completo.
+
+

@@ -24,26 +24,35 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'titulo',
-            [
-                'format' =>'html',
-                'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
-        
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'pager' => [
+    'class' => \yii\widgets\LinkPager::class,
+    'options' => ['class' => 'pagination justify-content-center'],
+    'linkOptions' => ['class' => 'page-link'],
+    'activePageCssClass' => 'active',
+    'disabledPageCssClass' => 'disabled', // <- esta clase aplica al elemento <li> si está deshabilitado
+    'pageCssClass' => 'page-item',
+    'prevPageLabel' => '«',
+    'nextPageLabel' => '»',
+    'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link'], // <- agrega clase a botón deshabilitado
+],
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        'id',
+        'titulo',
+        [
+            'format' =>'html',
+            'value' => function($data){ return Html::img($data->imagen, ['width' => '60px']); },
         ],
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
+        [
+            'class' => ActionColumn::class,
+            'urlCreator' => function ($action, Libro $model, $key, $index, $column) {
+                return Url::toRoute([$action, 'id' => $model->id]);
+            },
         ],
-    ]); ?>
+    ],
+]); ?>
 
 
 </div>
