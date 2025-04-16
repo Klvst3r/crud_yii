@@ -1,0 +1,56 @@
+Menu para el CRUD
+
+Ahora que tenemos lo que es el paginado, podemos accederal home, pero si no sabemos acceder por la url, apuntando hacia nuestro crud, vamos a requerir ver realemnte nuestro acceso hacia lo que es ese crud, o en especifico a esos libros.
+
+Pero no tenemos ninguna opcion en la parte superior derecha.
+
+
+Asi que vamos a ir dentro del modelo
+
+models/LibroSearch.php
+
+analisando bien nuestro codigo.
+
+Tenemos, en la parte de vistas, 
+
+/views
+-- / layouts
+    - main.php
+--/ libro
+--  _form.php
+    _search.php
+    create.php
+    index.php
+    update.php
+    views.php
+
+Tenemos lo que es la carpeta libro que tiene el form, el buscador, create, index, update, view.
+
+
+Pero tambien tenemos el layout, ya se habia integrado antes.
+
+Por ejemplo cuando trabajamos con el main.php (layout)
+
+especificamente en la siguiente linea:
+
+    ['label' => 'Aplication', 'url' => ['/sitio/inicio']],
+
+Lo uqe se incluyo la url
+
+Se va a hacer el mismo aplicando el mismo concepto
+
+creando una coṕia y se pone por ejemplo
+
+ Debajo de la siguiente linea:
+
+    ['label' => 'Home', 'url' => ['/site/index']],
+
+Poneos:
+
+    ['label' => 'Libros', 'url' => ['/libro/index']],
+
+
+que index es el que realmente creo el generador.
+
+Guardamos y vamos a acutalizar y en l aparte superior ya se cuenta con un boton paa ir a nuestro crud directamente 
+
