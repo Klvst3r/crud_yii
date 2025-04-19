@@ -1,0 +1,64 @@
+Ya vismos como acceder una url libros
+
+Ahora analizando el acceso, ya que dentro del meno exste un boton llamado "Login" si hacemos click en el os solicitara un nombre de usuario y conytraseña
+
+Esto viene integrado cuando instalamos Yii Framework ya se tiene ellogin y el pass.
+
+En el archivo
+
+    views/laypout/main.php
+
+
+Existe una validación, en la parte del login, lo unico que estamos haciendo es que si exciste el login.
+
+    Yii::$app->user->isGuest
+                ? ['label' => 'Login', 'url' => ['/site/login']]
+                : '<li class="nav-item">'
+                    . Html::beginForm(['/site/logout'])
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'nav-link btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>'
+
+Si existe un login, lo cambiamos al logout, entonces, esta informción que se esta validando, podriamos preguntarnos donde se encuentyra.
+
+recordando un poco que tenemos la vista, el controlador en el cntrolador no podemos encontrar nada todavia.
+
+La vista podria estar mostrando la información, en el caso de los ususarios los vamos a encuntrar directamente en la carpeta "models"
+
+models/User.php
+
+En esta carpeta entonctraremos algunos registros, pueden no ser identificables por que estan, en un array.
+
+ahi Yii Framework estan sirviendo y poder identificar a que usuario, se va a logear y a que usuario va a permitir. En este caso, tenemos dos usuarios, unos amdinistradtivs y uno demos, ambos con diferentes ids que nos permitiran dar la pauta de que determinar que tipo de usuarios se estan logeando.
+
+
+ '100' => [
+            'id' => '100',
+            'username' => 'admin',
+            'password' => 'admin',
+            'authKey' => 'test100key',
+            'accessToken' => '100-token',
+        ],
+        '101' => [
+            'id' => '101',
+            'username' => 'demo',
+            'password' => 'demo',
+            'authKey' => 'test101key',
+            'accessToken' => '101-token',
+        ],
+
+
+
+Tenemos la autenticación y tenemos lo que es el authtoken, que son datos adicionales que podrtemos utilizar duante la creación o un bloqueo de nuestra aplicación, vamos a probar el usuario 
+
+    admin/admin
+
+Que es el user y pass, y si ponemos estas credenciales, en nuestro boton de estatus se cambia a a log out, por que ya se autentico, el usaer admin.
+
+Si nosotros queremos cambiar a información haremos este cambio en lo que es models/users.php
+
+Podremos alterar la informació que esta ahi.
+
