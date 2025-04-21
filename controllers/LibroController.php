@@ -15,6 +15,13 @@ use app\controllers\yii;
 //Clase para crar una referencia del archivo que se va a adjuntar a la carpeta uploads
 use yii\web\UploadedFile;
 
+
+//clases para mostrar inforamción paginada
+//Inlcuir directamente una paginación
+use yii\data\Pagination;
+
+
+
 /**
  * LibroController implements the CRUD actions for Libro model.
  */
@@ -200,6 +207,28 @@ class LibroController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+
+    public function actionLista(){
+        //consulta d elos datos mediate el modelo, contabiliza todos los registros que estan en el modelo par pasarlos a la paginación con el total 
+        $model = Libro::find(); //Busca libros de acuerdo a la consulta.
+
+        //Paginación
+        $paginacion = new Pagination([
+            'defaultPageSize' => 2, //Número de libros por página
+            'totalCount' => $model->count(), //Total de registros de libros
+        ]);
+
+        //Muestrame toda la información ordenada por titulo, respetando el offset que esta en la paginación 
+        //Pniendo el limite que es la cantidad de datos que se va a mostrar y despues muestrame toda la ifnroamción
+        $libros = $model->orderBy('titulo')->offset($paginacion->offset)->limit($paginacion->limit)->all();
+
+        //Retorna la vista que sera public, como parametro es el dato d elos libros y la paginación qie se ha establecdido
+        return $this->render('lista',['libros'=>$libros, 'paginacion'=>$paginacion]); //tiene el valor de paginación
+    }
+
+
 
 
     protected function subirFoto(Libro $model){
