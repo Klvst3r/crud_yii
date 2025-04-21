@@ -1,0 +1,69 @@
+Se hacen algunos ajustes 
+
+En el main, 
+
+Se va a quitar o que no se necesita.
+
+Ya que hay algunos detalles ya que por ejemplo en algunos ocacions marca que no tiene soporte para png
+Y eso es por que no tenemos instalado ImageMagick PHP es una aplicación que permite transformar o redimensionar las imagenes.
+
+No es indispensable pero son dependencias del servidor que son detalles tecnicos, que si tiene por que se esta utlizando lo que es el caption.
+
+
+Podemos eliminar contact.
+
+Tenemos about, podemos poner nuestra información que indica que esta en views/site/about.PHP
+
+Podemos poner un acerca de, en home tenemos lo que son lo libros, 
+
+My Application podemos busca rl nombre de la aplicación, para cambiar el nombre podemos utilizar lo que es el esquema:
+
+    NavBar::begin([
+        'brandLabel' => Yii::$app->name,
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+    ]);
+
+nosotros podemos indntificar que brnadLabel pertenece a un nombre.
+
+Tenemos:
+
+    brandUrl
+
+En 
+    'brandLabel' => Yii::$app->name,
+
+     Podemos cambiar el $app->name en la parte de config, tenemos la carpeta config, y tenemos un aconfiguración en
+     
+config/web.php
+
+Si abrimos este archivo tenemos un id, que tiene los datos propieamente de configuración.
+
+podemos poner name con el vaor de nuestra biblioteca.
+
+    'name' => 'Develoteca',
+
+
+Y vamos a ver que altera la vista podemos ver el cambio con nuestro nombre de la aplicación.
+
+
+Asi podemos darnos una idea, de como manipular todo lo que es la interfaz grafica, el layout.
+
+Con los fragmentos de codigo. utilizar para imprimir, porejemplo
+
+    en el footer de la aplicación
+
+teniendo:
+    <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
+
+
+Podemos poner 
+
+    <div class="col-md-6 text-center text-md-start">&copy; <?= Yii::$app->name ?> <?= date('Y') ?></div>
+
+
+Que es el nombre de la aplicación. aunque son cambios sencillo, podemos modificar, a nuestro parecer a la manipulación.
+
+
+con esto vamos concluyendo el proyecto.
+
