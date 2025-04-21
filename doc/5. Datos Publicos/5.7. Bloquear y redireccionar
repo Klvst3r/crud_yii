@@ -1,0 +1,306 @@
+Ahora que ya tenemos mayor información, con los libros del paginado, ahora tenwmos lo que es la lista.
+
+
+Para continuar, y al no estar logueados, el acceso se va a cerrar completamente.
+
+
+utilizamos la validación.
+
+Asi que la pregunta seria:
+
+
+¿Como le hago par aindicar que sean introducidos ciertas ingresos?
+
+
+Vaos a intrducir mediante el login, para ello vamos a poner los nomsbres de las vistas y los nombres de las acciones.
+
+
+Para que puedamos bloquear o restringir los accesos a las vistas
+
+    //Bloqueamos el accesoa cierats vista
+                    'only' => ['index', 'view', 'create', 'update', 'delete'],
+
+Esto es en el controlador:
+
+    Librocontroller.php
+
+
+Para que unicamente el usuario ogeado pueda acceder a esta información.
+
+
+ http://localhost:7000/index.php?r=libro%2Findex
+
+
+ Esto es importante por que a la hora de exhibir, nuestros productos, la gente va a pode ver el desplegado.
+
+
+ si ponesmo por ejemplo en la url 
+
+ http://localhost:7000/index.php?r=libro%2Flista
+
+
+ Podemos acceder a ala lista.  Iinflye e n lo que es la lisat de la paginación.
+
+que pasa si lo queremos poner en la pagina principal.
+
+ Podemos en el controlador cambiar estos datos.
+
+
+ Y que en el controladro SitioController.php
+
+ Lo que hace es irse directamente a una vista.
+
+
+ Esto hace quenos, tambien l hacen ciertos accedos. En nuestro archivo Sitecontroller, podemos hacer que se redireccione, 
+
+
+ ya eu lo que sigue es realemnte una vista.
+
+     public function actionIndex()
+    {
+        return $this->render('index');
+    }
+
+
+Ya no queremos que muestre esta lista si no que sea el metodo, pero es mas engorroso por que tenemos que inlcuir el modelo y consutaro.
+
+Por ello lo unico que vamos a hacer es un redirect.
+
+    public function actionIndex()
+    {
+        //return $this->render('index');
+        return $this->render('libro/lista');
+    }
+
+Lo ideal es poniendo la dirección de la ruta.
+
+
+Si lo guardamos y vamos al indice de la aplicación nos llevara direcamente a lo que es  aportada con los libros disponibles, para visualizarse y gestionar un panel administatvios
+
+
+Podemos poner la dirección de la ruta que es lo que hace esta liea de codigo.
+
+
+
+
+
+Teniendo este codigo, nuestra vista funciona en index, con la paginación de los libros.
+
+
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\LinkPager;
+
+
+
+?>
+
+<h1>Libros a la venta</h1>
+<div class="row">
+
+<?php foreach($libros as $libro): ?>
+    
+
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <a href="#" class="thumbnail">
+            
+
+            <?= Html::img($libro->imagen, ['width' => '100px']); ?>
+            <?= Html::encode("{$libro->titulo}") ?>
+        </a>
+    </div>
+
+
+<?php endforeach; ?>    
+
+</div>
+
+<?= LinkPager::widget(['pagination' => $paginacion]) ?>
+
+
+Mas sin embargo no aparecen correctemente los estilos de bootstarp por lo que vamos a modificar el codigo de la siguiente manera
+
+Quedando prviamente d ela siguiente manera:
+
+    <div class="container">
+    <div class="row">
+        <?php foreach($libros as $libro): ?>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <?= Html::img($libro->imagen, ['class' => 'card-img-top', 'alt' => $libro->titulo]) ?>
+                    <div class="card-body">
+                        <h5 class="card-title"><?= Html::encode($libro->titulo) ?></h5>
+                        <!-- Aquí puedes agregar más detalles del libro si quieres -->
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <?= LinkPager::widget([
+            'pagination' => $paginacion,
+            'options' => ['class' => 'pagination'],
+            'linkOptions' => ['class' => 'page-link'],
+            'activePageCssClass' => 'active',
+            'disabledPageCssClass' => 'disabled',
+            'pageCssClass' => 'page-item',
+            'prevPageLabel' => '«',
+            'nextPageLabel' => '»',
+        ]) ?>
+    </div>
+</div>
+
+
+Este codigo parece funiconar pero no se aplican correctamente los estilos de bootstrap de losbotones, por lo que se hace la siguiente modificación 
+
+El comportamiento que que ocurre en los botones « y » que no se aplican los etilos de manera inicial, es porque el widget LinkPager necesita saber cómo envolver correctamente cada enlace en <li> y aplicar las clases Bootstrap, especialmente para el primer y último botón (prev/next) o la página activa.
+
+Para solucionar el problema de que el primer botón (página actual) no tenga estilos, y que también los botones « y » (anterior y siguiente) luzcan bien incluso cuando están deshabilitados, podemos personalizar completamente el LinkPager.
+
+Solución detallada con LinkPager
+
+Ajusta el widget LinkPager::widget() así:
+
+<?= LinkPager::widget([
+    'pagination' => $paginacion,
+    'options' => ['class' => 'pagination'], // <ul class="pagination">
+    'linkOptions' => ['class' => 'page-link'], // <a class="page-link">
+    'activePageCssClass' => 'active', // <li class="page-item active">
+    'disabledPageCssClass' => 'disabled', // <li class="page-item disabled">
+    'pageCssClass' => 'page-item', // <li class="page-item">
+
+    // Etiquetas para los botones anteriores y siguientes
+    'prevPageLabel' => '«',
+    'nextPageLabel' => '»',
+
+    // Para que los elementos <li> tengan la clase 'page-item'
+    'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link'], // el <a> dentro del <li.disabled>
+]) ?>
+
+🛠️ ¿Por qué no funcionaba correctamente antes?
+
+    Bootstrap 4/5 usa <li class="page-item"> y dentro un <a class="page-link">. Si no indicas pageCssClass y linkOptions, el HTML no queda estructurado como Bootstrap lo espera.
+
+    El primer botón activo (la página en la que estás) debe tener la clase active en el <li>, y eso lo logras con 'activePageCssClass' => 'active'.
+
+    Los botones deshabilitados (cuando no puedes ir a la anterior o a la siguiente) deben tener disabled en <li> y el subTag correcto para que no se vean rotos.
+
+Resultado esperado
+----
+
+Con los ajustes de arriba, el HTML generado debería verse más o menos así (para la página activa y botones de navegación):
+
+<ul class="pagination">
+  <li class="page-item disabled"><a class="page-link">«</a></li>
+  <li class="page-item active"><a class="page-link">1</a></li>
+  <li class="page-item"><a class="page-link" href="/libros?page=2">2</a></li>
+  <li class="page-item"><a class="page-link" href="/libros?page=2">»</a></li>
+</ul>
+
+
+Ahora con esto el codigio queda de la siguiente manera:
+
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\LinkPager;
+
+$this->title = 'Libros a la venta';
+$this->params['breadcrumbs'][] = $this->title;
+
+?>
+
+<h1><?= Html::encode($this->title) ?></h1>
+
+<div class="container">
+    <div class="row">
+        <?php foreach($libros as $libro): ?>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <?= Html::img($libro->imagen, ['class' => 'card-img-top', 'alt' => $libro->titulo]) ?>
+                    <div class="card-body">
+                        <h5 class="card-title"><?= Html::encode($libro->titulo) ?></h5>
+                        <!-- Aquí puedes agregar más detalles del libro si quieres -->
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <?= LinkPager::widget([
+            'pagination' => $paginacion,
+            'options' => ['class' => 'pagination'],
+            'linkOptions' => ['class' => 'page-link'],
+            'activePageCssClass' => 'active',
+            'disabledPageCssClass' => 'disabled',
+            'pageCssClass' => 'page-item',
+            'prevPageLabel' => '«',
+            'nextPageLabel' => '»',
+        ]) ?>
+    </div>
+</div>
+
+
+ahora si nosotros vamos al index de la aplicación correc correctaemnte sin mayor complicación y aplicandose los estilos de Bootstrap
+
+quedando el codigo finalemnte como sigue para aplicarse los estilos de bootstrap corrcetamente:
+
+
+views/layput/lista.php
+---
+
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\LinkPager;
+
+$this->title = 'Libros a la venta';
+$this->params['breadcrumbs'][] = $this->title;
+
+?>
+
+<h1><?= Html::encode($this->title) ?></h1>
+
+<div class="container">
+    <div class="row">
+        <?php foreach($libros as $libro): ?>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <?= Html::img($libro->imagen, ['class' => 'card-img-top', 'alt' => $libro->titulo]) ?>
+                    <div class="card-body">
+                        <h5 class="card-title"><?= Html::encode($libro->titulo) ?></h5>
+                        <!-- Aquí puedes agregar más detalles del libro si quieres -->
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <?= LinkPager::widget([
+        'pagination' => $paginacion,
+        'options' => ['class' => 'pagination'], // <ul class="pagination">
+        'linkOptions' => ['class' => 'page-link'], // <a class="page-link">
+        'activePageCssClass' => 'active', // <li class="page-item active">
+        'disabledPageCssClass' => 'disabled', // <li class="page-item disabled">
+        'pageCssClass' => 'page-item', // <li class="page-item">
+
+        // Etiquetas para los botones anteriores y siguientes
+        'prevPageLabel' => '«',
+        'nextPageLabel' => '»',
+
+        // Para que los elementos <li> tengan la clase 'page-item'
+        'disabledListItemSubTagOptions' => ['tag' => 'a', 'class' => 'page-link'], // el <a> dentro del <li.disabled>
+    ]) ?>
+
+    </div>
+</div>
+
+
+ahora ya tenemos las tarjetas que pueden ser gestionadas correctamente.
+
+
+ 

@@ -1,0 +1,83 @@
+Como ya tenemos la vista ahora a poner el metodo, recordando que los metodos que se ponen dentro del controlador va a permitir mostrar lo que es la vista y presntarla.
+
+Vamos para ello al final del controlador
+    Librocontroller.
+
+
+antes del metodo
+
+        protected function subirFoto(Libro $model)
+
+ponemos:
+
+
+    public function actionLista(){
+        
+    }
+
+
+Se agrega el metodo actionLista(), action identifica a los modelos que se van a acceder, es este caso a lista, adentfo de la lista, lo que vamos a poner es la consulta de lso datos y lo vamos a hace mediante el modelo, lo que va a recibir es Libro::find();
+
+con esto practiamente crea una referencia del libro, y despues accede al metodo find para buscar todos los libros a la consylta o acceso que se tenga.
+
+antes de esto, debemos tener en cunata que 
+
+    return $this->render('lista');
+
+
+Con esto si ahora vamos a nuestra lista por url
+
+    http://localhost:7000/index.php?r=libro%2Flista
+
+Tendremos acceso a esta vista.
+
+Desde ca podemos observar que ya tenemos la vista.
+
+
+ahora vamos a utllizar los datos, pregynatando la ifnormacicń, primero necesitaremos unos metodos que nos mostraran, lo que es la inforacmiṕn paginada.
+
+Ya se a utilizado,
+
+
+Ahora para incluir la paginación que se incluye por que se mandara infomciṕn a la vista y se mandara tambien el paginado, de la siguinte manera,
+
+
+    use yii\data\Pagination;
+
+con esto se mandara información a la vista y mandaremos el paginado que sera interpretado.
+
+
+La paginación se hara en el metodo, se incluye par apoder ser utilizado.
+
+
+    public function actionLista(){
+        //consulta d elos datos mediate el modelo, contabiliza todos los registros que estan en el modelo par pasarlos a la paginación con el total 
+        $model = Libro::find(); //Busca libros de acuerdo a la consulta.
+
+        //Paginación
+        $paginacion = new Pagination([
+            'defaultPageSize' => 2, //Número de libros por página
+            'totalCount' => $model->count(), //Total de registros de libros
+        ]);
+
+        //Muestrame toda la información ordenada por titulo, respetando el offset que esta en la paginación 
+        //Pniendo el limite que es la cantidad de datos que se va a mostrar y despues muestrame toda la ifnroamción
+        $libros = $model->orderBy('titulo')->offset($paginacion->offset)->limit($paginacion->limit)->all();
+
+        //Retorna la vista que sera public, como parametro es el dato d elos libros y la paginación qie se ha establecdido
+        return $this->render('lista',['libros'=>$libros, 'paginacion'=>$paginacion]); //tiene el valor de paginación
+    }
+
+
+Muestra a información, con el offset que es la paginación, que e sla acntidad de dats y despues muestra toda la ifnroacmión.
+
+
+cuano tenemo todos los libros, lo que resta es pasar esos parametros a la lista, esos parametros van dentro del corchete.
+
+Se pasa lapaginación con un valor de paginación.
+
+que seria creame en la vista dos variables, que serian paginacipin y libros y l aotra se lee para la paginación.
+
+Conesto ya tendremos la ifnroamción pero aun no se despliega en la vista.
+
+

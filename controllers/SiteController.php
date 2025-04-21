@@ -61,7 +61,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //return $this->render('index');
+        //return $this->render('http://localhost:7000/index.php?r=libro/lista');
+        //return $this->render('http://localhost:7000/index.php?r=libro/lista');
+        //return $this->render('@app/views/libro/lista.php');
+        //tambien podemos hacer uso con
+        return $this->redirect(['libro/lista']);
+
     }
 
     /**

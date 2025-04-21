@@ -39,7 +39,8 @@ class LibroController extends Controller
                 'access' => [
                     //La siguiente clase es un control de acceso o filtro
                     'class' => \yii\filters\AccessControl::className(),
-                    //'only' => ['index', 'view', 'create', 'update', 'delete'],
+                    //Bloqueamos el accesoa cierats vista
+                    'only' => ['index', 'view', 'create', 'update', 'delete'],
                     //Roles para bloquear y desbloquear
                     'rules' => [
                         [

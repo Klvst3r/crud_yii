@@ -1,0 +1,68 @@
+Como el objetivo es leer la inforamción y en la vista ya tenemos lo que es la lista de libros. Vamos a pasarnos a la vista.
+
+
+Para trabajar con lo que son los datos, y utilizaremos lo que es un foreach.
+
+entonces vamos a poner lo siguiente:
+
+
+El foreach recibe los libros que se estan eviando y los va a trbajar como libro independiente
+
+
+<?php foreach($libros as $libro): ?>
+    <?= HTML::encode("{{ $libro->titulo }}") ?>
+
+<?php endforeach; ?>   
+
+
+Despues finaliza el endforeachm dentro vamos a mostrar la ifnroamción.
+
+Ponemos el titulo, o el texto, con el titulo 
+
+Se hace la impresión entre las llaves: $libro->titulo
+
+
+Ya con estos datos que esta sucediendo si se esta retornando.
+
+Eso quiere deir ya esta funcionando, ahora vamos a imprimir esos resuados en una tarjeta
+
+        <?= Html::encode("{$libro->titulo}") ?>
+
+Entonces quiere decir ya hay información para imprimir.
+
+
+Para nuestra tarjeta, vamos a utilizar boostrap, ahora podemos utilizar lo siguiente:
+
+     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+        <a href="#" class="thumbnail">
+            <img data-src="#" alt="">
+            <?= Html::encode("{$libro->titulo}") ?>
+        </a>
+    </div>
+
+Ahora si queremos abarcar todo, sabemos que con Bootsrap son 12 columnas lo vamos a dividir de la siuinte manera:
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <a href="#" class="thumbnail">
+            <img data-src="#" alt="">
+            <?= Html::encode("{$libro->titulo}") ?>
+        </a>
+    </div>
+
+Ahora nosotros tenemos que mostrar lo que e sla imagen, esa imagen va a ser una imagen, por ello vamos a hacer lo siguiente, que e sla impresión con los dtos que ya conocemios        
+
+        <?= Html::img($libro->imagen); ?>
+        <?= Html::encode("{$libro->titulo}") ?>
+
+ahora ya deberiamos ver la imagen, tenemos la información, y saber como se a ava a mostrar.
+La paareincia, debe ser con mayores instrucciones.
+
+Posterior a esto debemos tener inforamción del paginador.
+
+
+Esta paginación siguiente es la que recibimos del controlador
+
+    <?= LinkPager::widget(['pagination' => $paginacion]) ?>
+
+el widget lo que hace es invocarse que ayudara a mostrar la ifnroamción     
+
+
