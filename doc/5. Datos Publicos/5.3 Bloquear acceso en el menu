@@ -1,0 +1,76 @@
+Ya que bloqueamos vamos a hacer logout y vamos a observar que en el menu, no se esta quitando lo que es la opcion d elibros,
+
+Ya sea que estemos o nno logieamos la opcion continua, para bloquer esto.
+
+El bloqueo del contenido se bloqueo con el controlador, incluso si le damos click en el boton de Libros
+
+Pero para bloquearlo directamente, en lo que es el menu.
+
+Para ello vamos a pasarnos en
+
+    /views/layout/main.php
+
+Identificamos la etiqueta label
+    
+    ['label' => 'Home', 'url' => ['/site/index']],
+
+Acede directamete a libros pero no esta validadnod si hay unsuario logueado. Tambien como un pauta en la parte de abajo hay una validación:
+
+
+Esta preguntando si hay un usuario logieado.
+
+    Yii::$app->user->isGuest
+                ? ['label' => 'Login', 'url' => ['/site/login']]
+                : '<li class="nav-item">'
+                    . Html::beginForm(['/site/logout'])
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'nav-link btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>'
+
+Si es un usuario publico, le va a mostrar lo que es el login, de lo contrario va a mostrar un formulario que permitira hacer logout.                    
+
+Primera opcion:
+
+    ? ['label' => 'Login', 'url' => ['/site/login']]
+
+En caso contrario mostrara un formulario:
+
+    '<li class="nav-item">'
+                    . Html::beginForm(['/site/logout'])
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'nav-link btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>'
+
+
+Vamosa modificar utilizando estos parametros.
+
+Vamos a preguntar adentro, de todo esto, nos percatamos que hay comas "," lo que esta opcion del menu, nos indica que es todo el espacio que esta ocupando, 
+
+
+Ahora vamos a indicar que si el suaurio no esta logueado no va a mostrar nada, si esta logueado va a mostrar contenido de la siguiente maenra:
+
+    (!Yii::$app->user->isGuest)?(
+
+                ['label' => 'Libros', 'url' => ['/libro/index']])
+            :("")
+            ,
+
+
+Si esta logueado muestra e contenido y en caso contrario muestra solo un espacio
+ 
+
+Con esta validación de if ternario. desaparece la opcion del menu. La opcion o el boton de libros, pero si no esta logueado, simplemente no muestra nada.}
+
+Aun hay un detall por que si nos podemos ne index desde la aplicaciṕpn del Framework, no veremos los libros, asi que tambien modificaremos estas pciones.
+
+Para que desde la pagina principal me lleve e libros de la pagina de inicio.
+
+
+
+
