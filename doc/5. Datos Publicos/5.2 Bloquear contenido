@@ -1,0 +1,130 @@
+Ya sabemos donde esta el login, el password, pero que pasa si una persona que no esta logueada intenta accesar a la aseccion de libros.
+
+PPodemos percatarnos que podeamos logearnos y accear al contenido, perono estamos aplicando lo que es la validación del usuario.
+
+Para demostrarlo nos deslogueamos, y accedemos a la url de la aplicación de los libros.
+
+acccesando directamente por:
+
+    http://localhost:7000/index.php?r=libro%2Findex
+
+Y tendremos acceso al contenido aun cuando no estemos logueados.
+
+El login de ejemplo podemos hacer uso de las credenciales de:
+
+    You may login with admin/admin or demo/demo.
+
+To modify the username/password, please check out the code app\models\User::$users. 
+
+De acuerdo al modelo de usuarios.
+
+views/layouts/main.php
+
+Sin la necesidad de estar logeado,. Esto es lo que hay que controlar.
+
+Para ello, vamos a identificar en el archivo main.php
+Habra un usuario que se esta identificando con esta información.
+
+
+Bloqueo de contenido:
+--------------------
+Para hacer el bloque vamos a l archivo main en:
+
+    /controllers/LibroController.php
+
+Y en en codigo de la parte de arriba, donde inicia la clase LibroController tendremo que identificar esta parte:
+
+        public function behaviors()
+        {
+            return array_merge(
+                parent::behaviors(),
+                [
+                    'verbs' => [
+                        'class' => VerbFilter::className(),
+                        'actions' => [
+                            'delete' => ['POST'],
+                        ],
+                    ],
+                ]
+            );
+        }
+
+
+Esta parte nos va a servir para identiicar ciertos elementos que van a estar permitiendo la interacción, con todo el controlador, hay datos que podremos identificar y desglosar uno por uno.
+
+Por ahora no estamos interesado mas que en agregarle mas opciones.
+
+una de esas opciones a agregar es el bloqueo de datos.
+
+En la documentación esta mas desglosado y si queremos tener mas información.
+
+
+sin embargo lo que veremos podremos ver que esta mas claro.
+
+Lo primero que tenemos que tener en cuneta que el acceso es via controladro.
+
+Por que las personas que intentaran acceder de alguna forma, van a intentar enrar al controlador, para ello vamos a poner una clase:
+
+Para ello se agrega:
+
+
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                //Bloqueo de datos
+                'access' => [
+                    'class' => \yii\filters\AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true, 
+                            'roles' => ['@'],
+                        ],
+                    ],
+
+                ]
+                ,
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }
+
+
+Con esto se permite el acceso al contenido para aquellos que estan logueados.
+
+
+con esto si nosotros no nos autentificamos, no vamos a poder entrar al contenido de la aplicación.
+
+
+Es decir no sredirige forzosamente al login de acceso.
+
+    http://localhost:7000/index.php?r=site%2Flogin
+
+Pero si queremos ingresar directamente a la aplicaciṕon por ejemplo directamente desde la url.
+
+     http://localhost:7000/index.php?r=libro%2Findex
+
+Ya no  nos permite el acceso, asiq ue tenemos que logearnos par poder ingresar al contenido de nuestra aplicación.
+
+
+Si o slogeamos podremos tener acceso al contenido de la aplicación, con esto podemos ver que podemos controlar el acceso de cierta información.
+
+desde las reglas de control de acceso:
+
+
+    'rules' => [
+                        [
+                            'allow' => true, 
+                            'roles' => ['@'],
+                        ],
+
+
+ahora podemos bloquear con ls dos lineas anteriores, es decir conlos roles de acceso.
+
+

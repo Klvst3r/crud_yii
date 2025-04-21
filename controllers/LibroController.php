@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use yii\filters\AccessControl; //Se utiliza para el control de acceso al contenido de la palicación via login.
+
 use app\controllers\yii;
 
 //Clase para crar una referencia del archivo que se va a adjuntar a la carpeta uploads
@@ -26,6 +28,22 @@ class LibroController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                //Bloqueo de datos
+                'access' => [
+                    //La siguiente clase es un control de acceso o filtro
+                    'class' => \yii\filters\AccessControl::className(),
+                    //'only' => ['index', 'view', 'create', 'update', 'delete'],
+                    //Roles para bloquear y desbloquear
+                    'rules' => [
+                        [
+                            'allow' => true, //dejar asar a todos os que estan logueados
+                            'roles' => ['@'], // Solo usuarios autenticados, es decir, que han iniciado sesión.
+                            //'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        ],
+                    ],
+
+                ]
+                ,
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
